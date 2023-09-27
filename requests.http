@@ -9,12 +9,12 @@ Authorization: Basic authenticated:
 
 ### Create Phases
 
-GET  https://projects-service-triumphant-baboon-hl.cfapps.us10-001.hana.ondemand.com/odata/v4/AdminService/Phases
+Post  https://projects-service-triumphant-baboon-hl.cfapps.us10-001.hana.ondemand.com/odata/v4/AdminService/MappingTable
 Content-Type: application/json
 Authorization: Basic authenticated:
 
 
-{"ID": 3, "project": {"ID":1}}
+{"REFX": "REFX", "MapID": "ID"}
 
 
 
@@ -67,9 +67,9 @@ Content-Length: ####
 
 ### Create Erp Table Mass Upload
 
-Post  http://localhost:8080/odata/v4/ExportToTable/multipleEntries
+Post  http://localhost:8080/odata/v4/AdminService/MassUploadMapping
 Content-Type: application/json
-Content-Length: ####
+Authorization: Basic authenticated:
 
 {"Properties":[
 

@@ -5,8 +5,10 @@ import org.springframework.stereotype.Component;
 
 import com.sap.cds.ql.Insert;
 import com.sap.cds.ql.Select;
+import com.sap.cds.ql.Update;
 import com.sap.cds.ql.cqn.CqnInsert;
 import com.sap.cds.ql.cqn.CqnSelect;
+import com.sap.cds.ql.cqn.CqnUpdate;
 import com.sap.cds.services.ServiceException;
 import com.sap.cds.services.cds.CdsCreateEventContext;
 import com.sap.cds.services.cds.CqnService;
@@ -23,6 +25,7 @@ import cds.gen.adminservice.MassUploadProjectsContext;
 import cds.gen.adminservice.Projects;
 import cds.gen.adminservice.MassUploadMappingContext;
 import cds.gen.adminservice.MappingTable;
+import cds.gen.adminservice.MappingTable_;
 
 
 @Component
@@ -71,9 +74,40 @@ public class AdminService implements EventHandler{
     }
     @On(event = MassUploadMappingContext.CDS_NAME)
     public void multipleEntries (MassUploadMappingContext context){
-        CqnInsert insert = Insert.into("AdminService.MappingTable").entries(context.getProperties());
-        db.run(insert);
-        context.setResult(context.getProperties());
+        String result ="";
+        boolean flag=false;
+
+        for(MappingTable property : context.getProperties()){
+            CqnSelect sel = Select.from(MappingTable_.class).where(p -> p.MapID().eq(property.getMapID()));
+            if(db.run(sel).rowCount()>0){
+                
+                //MappingTable temp = (MappingTable)db.run(sel).first().get().as(MappingTable_.class);
+                CqnSelect sel2 = Select.from(MappingTable_.class).where(p -> p.REFX().eq(property.getRefx().toString()));
+                if(db.run(sel2).rowCount()>0){
+                    flag = true;
+                    result += "MapID: " + db.run(sel).first().get().get("MapID").toString() + " already exists with REFX: " + db.run(sel2).first().get().get("REFX").toString() +"/n";
+                }
+                else{
+                    
+                    //temp.setRefx(property.getRefx());
+                    CqnUpdate update = Update.entity("AdminService.MappingTable").data("REFX",property.getRefx()).byId(property.getMapID());
+                    db.run(update); 
+                }
+
+
+            }
+            else{
+                CqnInsert insert = Insert.into("AdminService.MappingTable").entry(property);
+                db.run(insert);
+
+            }
+        }
+
+        if(!flag){
+            result = "Success";
+        }
+        
+        context.setResult(result);
         
 
     }

@@ -60,9 +60,10 @@ CREATE TABLE sap_capire_properties_Projects (
 ); 
 
 CREATE TABLE sap_capire_properties_ERPTable (
-  REFX NVARCHAR(111) NOT NULL,
+  REFX NVARCHAR(111),
   MapID NVARCHAR(111) NOT NULL,
-  PRIMARY KEY(REFX, MapID)
+  PRIMARY KEY(MapID),
+  CONSTRAINT sap_capire_properties_ERPTable_REFX UNIQUE (REFX)
 ); 
 
 CREATE TABLE sap_capire_properties_Properties_texts (

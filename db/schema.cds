@@ -34,8 +34,11 @@ entity Projects {
 
 }
 
+@assert.unique : {
+   REFX: [ REFX ]
+}
 @Capabilities.Updatable : true
 entity ERPTable{
-    key REFX : String(111);
+    REFX : String(111);
     key MapID : String(111);
 }
