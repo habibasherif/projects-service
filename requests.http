@@ -73,7 +73,7 @@ Authorization: Basic authenticated:
 
 {"Properties":[
 
-        {"REFX":"REFLL",  "MapID":"169"},
+        {"REFX":"REFL",  "MapID":"180"},
 
         {"REFX":"REFXID",  "MapID":"1559"}
 

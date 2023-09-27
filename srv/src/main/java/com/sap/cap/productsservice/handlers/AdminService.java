@@ -84,8 +84,10 @@ public class AdminService implements EventHandler{
                 //MappingTable temp = (MappingTable)db.run(sel).first().get().as(MappingTable_.class);
                 CqnSelect sel2 = Select.from(MappingTable_.class).where(p -> p.REFX().eq(property.getRefx().toString()));
                 if(db.run(sel2).rowCount()>0){
-                    flag = true;
-                    result += "MapID: " + db.run(sel).first().get().get("MapID").toString() + " already exists with REFX: " + db.run(sel2).first().get().get("REFX").toString() +"/n";
+                    if(!db.run(sel2).first().get().get("MapID").equals(property.getMapID().toString()) ){
+                        flag = true;
+                        result += "MapID: " + db.run(sel).first().get().get("MapID").toString() + " already exists with REFX: " + db.run(sel2).first().get().get("REFX").toString() +" /n";
+                    }
                 }
                 else{
                     
@@ -97,8 +99,18 @@ public class AdminService implements EventHandler{
 
             }
             else{
-                CqnInsert insert = Insert.into("AdminService.MappingTable").entry(property);
-                db.run(insert);
+                CqnSelect sel3 = Select.from(MappingTable_.class).where(p -> p.REFX().eq(property.getRefx()));
+                if(db.run(sel3).rowCount()>0){
+                    if(!db.run(sel3).first().get().get("MapID").equals( property.getMapID())){
+                        flag = true;
+                        result += "REFX: "+ property.getRefx().toString()+ " already exists with MapID: " +db.run(sel3).first().get().get("MapID")+" /n";
+                    }   
+                }
+                else{
+
+                    CqnInsert insert = Insert.into("AdminService.MappingTable").entry(property);
+                    db.run(insert);
+                }
 
             }
         }
