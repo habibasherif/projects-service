@@ -5,7 +5,6 @@ using { Currency, cuid, managed, sap.common.CodeList } from '@sap/cds/common';
 @assert.unique : {
    REFX: [ REFX ]
 }
-@Cross
 @Capabilities.Deletable :true
 entity Properties : managed {
     REFX   :  String (111);
@@ -22,6 +21,7 @@ entity Phases {
     key ID   : Integer;
     project   : Association to Projects not null;
     content : String (111);
+    name : String (111);
 }
 
 @Capabilities.Deletable :true
@@ -29,5 +29,6 @@ entity Projects {
     Key ID : Integer;
     phases : Composition of many Phases on phases.project=$self;
     content : String(111);
+    name : String (111);
 
 }

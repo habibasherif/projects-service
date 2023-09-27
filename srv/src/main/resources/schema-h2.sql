@@ -42,12 +42,14 @@ CREATE TABLE sap_capire_properties_Phases (
   ID INTEGER NOT NULL,
   project_ID INTEGER NOT NULL,
   content NVARCHAR(111),
+  name NVARCHAR(111),
   PRIMARY KEY(ID)
 ); 
 
 CREATE TABLE sap_capire_properties_Projects (
   ID INTEGER NOT NULL,
   content NVARCHAR(111),
+  name NVARCHAR(111),
   PRIMARY KEY(ID)
 ); 
 
@@ -73,12 +75,14 @@ FROM sap_capire_properties_Properties AS Properties_0;
 CREATE VIEW AdminService_Phases AS SELECT
   Phases_0.ID,
   Phases_0.project_ID,
-  Phases_0.content
+  Phases_0.content,
+  Phases_0.name
 FROM sap_capire_properties_Phases AS Phases_0; 
 
 CREATE VIEW AdminService_Projects AS SELECT
   Projects_0.ID,
-  Projects_0.content
+  Projects_0.content,
+  Projects_0.name
 FROM sap_capire_properties_Projects AS Projects_0; 
 
 CREATE VIEW PropertyService_Property AS SELECT
@@ -118,7 +122,8 @@ FROM sap_capire_properties_Properties_texts AS texts_0;
 CREATE VIEW ExportToTable_Phases AS SELECT
   Phases_0.ID,
   Phases_0.project_ID,
-  Phases_0.content
+  Phases_0.content,
+  Phases_0.name
 FROM sap_capire_properties_Phases AS Phases_0; 
 
 CREATE VIEW ExportToTable_Property_texts AS SELECT
