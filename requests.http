@@ -1,0 +1,91 @@
+
+### Create Project
+
+POST  https://projects-service-triumphant-baboon-hl.cfapps.us10-001.hana.ondemand.com/odata/v4/AdminService/Projects
+Content-Type: application/json
+Authorization: Basic authenticated:
+
+{"ID": 3 , "content":"content Test", "phases":[{"ID": 8,"content":"Phase Content"}]}
+
+### Create Phases
+
+GET  https://projects-service-triumphant-baboon-hl.cfapps.us10-001.hana.ondemand.com/odata/v4/AdminService/Phases
+Content-Type: application/json
+Authorization: Basic authenticated:
+
+
+{"ID": 3, "project": {"ID":1}}
+
+
+
+### Create REFX
+
+POST http://localhost:8080/odata/v4/AdminService/ERPRelation
+Content-Type: application/json
+
+{"REFX": "REFXID6"}
+
+
+### Search by MapID
+
+GET  http://localhost:8080/odata/v4/PropertyService/getPropertyByMapID(MapID='14')
+Content-Type: application/json
+Authorization: Basic authenticated:
+
+{"MapID": "14"}
+
+
+
+
+### Create Categories
+
+Post http://localhost:8080/odata/v4/AdminService/Properties
+Content-Type: application/json
+
+{"REFX":"REFXIL",  "MapID":"158","Path": "New.com", "Status": "Available", "Phase_ID":2}
+
+
+
+### Export to table function
+
+Get  http://localhost:8080/odata/v4/ExportToTable/ExportToTable()
+Content-Type: application/json
+Content-Length: ####
+
+{"REFX":"REFX",  "MapID":"155"}
+
+
+### Create ERP table entry
+
+POST   http://localhost:8080/odata/v4/ExportToTable/ERPTable
+Content-Type: application/json
+Content-Length: ####
+
+{"REFX":"REFX",  "MapID":"155"}
+
+### Create Erp Table Mass Upload
+
+Post  http://localhost:8080/odata/v4/ExportToTable/multipleEntries
+Content-Type: application/json
+Content-Length: ####
+
+{"Properties":[
+
+        {"REFX":"REFLL",  "MapID":"169"},
+
+        {"REFX":"REFXID",  "MapID":"1559"}
+
+    ]
+
+    }
+
+
+
+ 
+
+ 
+    
+    
+        
+
+

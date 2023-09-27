@@ -1,0 +1,13 @@
+---
+applications:
+- name: projects-service
+  path: srv/target/projects-service-exec.jar
+  random-route: true
+  buildpacks:
+  - java_buildpack
+  env:
+    JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 17.+ }}'
+    JBP_CONFIG_SPRING_AUTO_RECONFIGURATION: '{enabled: false}'
+    SPRING_PROFILES_ACTIVE: cloud
+  services:
+  - projects-hana
