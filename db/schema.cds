@@ -22,6 +22,7 @@ entity Phases {
     project   : Association to Projects not null;
     content : String (111);
     name : String (111);
+    properties: Composition of many Properties on properties.Phase=$self;
 }
 
 @Capabilities.Deletable :true
@@ -31,4 +32,9 @@ entity Projects {
     content : String(111);
     name : String (111);
 
+}
+
+entity ERPTable{
+    key REFX : String(111);
+    key MapID : String(111);
 }

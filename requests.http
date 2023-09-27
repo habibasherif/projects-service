@@ -20,10 +20,14 @@ Authorization: Basic authenticated:
 
 ### Create REFX
 
-POST http://localhost:8080/odata/v4/AdminService/ERPRelation
+POST http://localhost:8080/odata/v4/AdminService/MassUploadProjects
 Content-Type: application/json
+Authorization: Basic authenticated:
 
-{"REFX": "REFXID6"}
+{"Projects": [
+    {"ID":1,"phases":[{"ID":1},{"ID":2}]},
+    {"ID":2,"phases":[{"ID":3},{"ID":4}]}
+]}
 
 
 ### Search by MapID

@@ -19,6 +19,10 @@ import com.sap.cds.services.persistence.PersistenceService;
 import cds.gen.adminservice.AdminService_;
 import cds.gen.adminservice.Properties_;
 import cds.gen.adminservice.Properties_;
+import cds.gen.adminservice.MassUploadProjectsContext;
+import cds.gen.adminservice.Projects;
+import cds.gen.adminservice.MassUploadMappingContext;
+import cds.gen.adminservice.MappingTable;
 
 
 @Component
@@ -54,5 +58,42 @@ public class AdminService implements EventHandler{
 
         
     }
+
+    @On(event = MassUploadProjectsContext.CDS_NAME)
+    public void MassUploadProjects (MassUploadProjectsContext context){
+       // for(Projects project : context.getProjects()){
+        CqnInsert insert = Insert.into("AdminService.Projects").entries(context.getProjects());
+        db.run(insert);
+        context.setResult(context.getProjects());
+
+
+        //}
+    }
+    @On(event = MassUploadMappingContext.CDS_NAME)
+    public void multipleEntries (MassUploadMappingContext context){
+        CqnInsert insert = Insert.into("AdminService.MappingTable").entries(context.getProperties());
+        db.run(insert);
+        context.setResult(context.getProperties());
+        
+
+    }
+
+    // @On(event = ExportToTableContext.CDS_NAME)
+    // public void totest (ExportToTableContext context){
+    //     CqnSelect sel = Select.from(ERPTable_.class);
+      
+    //     db.run(sel).forEach(p -> {
+    //         Map <String , String> erp = new HashMap<>();
+    //         erp.put("REFX", p.get("REFX").toString());
+    //         erp.put("MapID", p.get("MapID").toString());
+    //         CqnInsert insert = Insert.into("ExportTable.Property").entry(erp);
+
+    //     });
+
+        
+
+    //    context.setResult("Success");
+   
+    // }
     
 }
