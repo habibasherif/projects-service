@@ -88,11 +88,19 @@ public class AdminService implements EventHandler{
                         flag = true;
                         result += "MapID: " + db.run(sel).first().get().get("MapID").toString() + " already exists with REFX: " + db.run(sel2).first().get().get("REFX").toString() +" /n";
                     }
+                    else{
+                        CqnUpdate update = Update.entity("AdminService.MappingTable").data(property);
+                        db.run(update); 
+                        
+
+                    }
                 }
                 else{
                     
                     //temp.setRefx(property.getRefx());
-                    CqnUpdate update = Update.entity("AdminService.MappingTable").data("REFX",property.getRefx()).byId(property.getMapID());
+                   
+                    CqnUpdate update = Update.entity("AdminService.MappingTable").data(property);
+                    
                     db.run(update); 
                 }
 
@@ -104,6 +112,12 @@ public class AdminService implements EventHandler{
                     if(!db.run(sel3).first().get().get("MapID").equals( property.getMapID())){
                         flag = true;
                         result += "REFX: "+ property.getRefx().toString()+ " already exists with MapID: " +db.run(sel3).first().get().get("MapID")+" /n";
+                    }
+                    else{
+                        CqnUpdate update = Update.entity("AdminService.MappingTable").data(property);
+
+                        db.run(update); 
+
                     }   
                 }
                 else{

@@ -1,19 +1,25 @@
 
+DROP VIEW IF EXISTS localized_fr_AdminService_MappingTable;
+DROP VIEW IF EXISTS localized_de_AdminService_MappingTable;
 DROP VIEW IF EXISTS localized_fr_AdminService_Projects;
 DROP VIEW IF EXISTS localized_de_AdminService_Projects;
 DROP VIEW IF EXISTS localized_fr_AdminService_Phases;
 DROP VIEW IF EXISTS localized_de_AdminService_Phases;
 DROP VIEW IF EXISTS localized_fr_AdminService_Properties;
 DROP VIEW IF EXISTS localized_de_AdminService_Properties;
+DROP VIEW IF EXISTS localized_fr_sap_capire_properties_ERPTable;
+DROP VIEW IF EXISTS localized_de_sap_capire_properties_ERPTable;
 DROP VIEW IF EXISTS localized_fr_sap_capire_properties_Projects;
 DROP VIEW IF EXISTS localized_de_sap_capire_properties_Projects;
 DROP VIEW IF EXISTS localized_fr_sap_capire_properties_Phases;
 DROP VIEW IF EXISTS localized_de_sap_capire_properties_Phases;
 DROP VIEW IF EXISTS localized_fr_sap_capire_properties_Properties;
 DROP VIEW IF EXISTS localized_de_sap_capire_properties_Properties;
+DROP VIEW IF EXISTS localized_AdminService_MappingTable;
 DROP VIEW IF EXISTS localized_AdminService_Projects;
 DROP VIEW IF EXISTS localized_AdminService_Phases;
 DROP VIEW IF EXISTS localized_AdminService_Properties;
+DROP VIEW IF EXISTS localized_sap_capire_properties_ERPTable;
 DROP VIEW IF EXISTS localized_sap_capire_properties_Projects;
 DROP VIEW IF EXISTS localized_sap_capire_properties_Phases;
 DROP VIEW IF EXISTS localized_sap_capire_properties_Properties;
@@ -62,7 +68,9 @@ CREATE TABLE sap_capire_properties_Projects (
 CREATE TABLE sap_capire_properties_ERPTable (
   REFX NVARCHAR(111),
   MapID NVARCHAR(111) NOT NULL,
-  PRIMARY KEY(MapID),
+  Project_ID INTEGER NOT NULL,
+  Phase_ID INTEGER,
+  PRIMARY KEY(MapID, Project_ID),
   CONSTRAINT sap_capire_properties_ERPTable_REFX UNIQUE (REFX)
 ); 
 
@@ -100,7 +108,9 @@ FROM sap_capire_properties_Projects AS Projects_0;
 
 CREATE VIEW AdminService_MappingTable AS SELECT
   ERPTable_0.REFX,
-  ERPTable_0.MapID
+  ERPTable_0.MapID,
+  ERPTable_0.Project_ID,
+  ERPTable_0.Phase_ID
 FROM sap_capire_properties_ERPTable AS ERPTable_0; 
 
 CREATE VIEW PropertyService_Property AS SELECT
@@ -145,6 +155,13 @@ CREATE VIEW localized_sap_capire_properties_Projects AS SELECT
   L.name
 FROM sap_capire_properties_Projects AS L; 
 
+CREATE VIEW localized_sap_capire_properties_ERPTable AS SELECT
+  L.REFX,
+  L.MapID,
+  L.Project_ID,
+  L.Phase_ID
+FROM sap_capire_properties_ERPTable AS L; 
+
 CREATE VIEW localized_AdminService_Properties AS SELECT
   Properties_0.createdAt,
   Properties_0.createdBy,
@@ -169,6 +186,13 @@ CREATE VIEW localized_AdminService_Projects AS SELECT
   Projects_0.content,
   Projects_0.name
 FROM localized_sap_capire_properties_Projects AS Projects_0; 
+
+CREATE VIEW localized_AdminService_MappingTable AS SELECT
+  ERPTable_0.REFX,
+  ERPTable_0.MapID,
+  ERPTable_0.Project_ID,
+  ERPTable_0.Phase_ID
+FROM localized_sap_capire_properties_ERPTable AS ERPTable_0; 
 
 CREATE VIEW localized_de_sap_capire_properties_Properties AS SELECT
   L_0.createdAt,
@@ -220,6 +244,20 @@ CREATE VIEW localized_fr_sap_capire_properties_Projects AS SELECT
   L.name
 FROM sap_capire_properties_Projects AS L; 
 
+CREATE VIEW localized_de_sap_capire_properties_ERPTable AS SELECT
+  L.REFX,
+  L.MapID,
+  L.Project_ID,
+  L.Phase_ID
+FROM sap_capire_properties_ERPTable AS L; 
+
+CREATE VIEW localized_fr_sap_capire_properties_ERPTable AS SELECT
+  L.REFX,
+  L.MapID,
+  L.Project_ID,
+  L.Phase_ID
+FROM sap_capire_properties_ERPTable AS L; 
+
 CREATE VIEW localized_de_AdminService_Properties AS SELECT
   Properties_0.createdAt,
   Properties_0.createdBy,
@@ -269,4 +307,18 @@ CREATE VIEW localized_fr_AdminService_Projects AS SELECT
   Projects_0.content,
   Projects_0.name
 FROM localized_fr_sap_capire_properties_Projects AS Projects_0; 
+
+CREATE VIEW localized_de_AdminService_MappingTable AS SELECT
+  ERPTable_0.REFX,
+  ERPTable_0.MapID,
+  ERPTable_0.Project_ID,
+  ERPTable_0.Phase_ID
+FROM localized_de_sap_capire_properties_ERPTable AS ERPTable_0; 
+
+CREATE VIEW localized_fr_AdminService_MappingTable AS SELECT
+  ERPTable_0.REFX,
+  ERPTable_0.MapID,
+  ERPTable_0.Project_ID,
+  ERPTable_0.Phase_ID
+FROM localized_fr_sap_capire_properties_ERPTable AS ERPTable_0; 
 

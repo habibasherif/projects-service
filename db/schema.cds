@@ -41,4 +41,7 @@ entity Projects {
 entity ERPTable{
     REFX : String(111);
     key MapID : String(111);
+    key Project : Association to Projects ;
+    Phase : Association  to Phases;
+    
 }

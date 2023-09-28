@@ -1,0 +1,55 @@
+{
+
+    "routes": [
+  
+      {
+  
+        "source": "^/api/(.*)$",
+  
+        "target": "$1",
+  
+        "destination": "my-destination"
+  
+      },
+  
+      {
+  
+        "source": "(.*)",
+  
+        "target": "$1",
+  
+        "destination": "webapp-destination"
+  
+      }
+  
+    ],
+  
+    "destinations": [
+  
+      {
+  
+        "name": "my-destination",
+  
+        "url": "https://projects-service-triumphant-baboon-hl.cfapps.us10-001.hana.ondemand.com",
+  
+        "authenticationType": "NoAuthentication",
+  
+        "proxyType": "Internet"
+  
+      },
+  
+      {
+  
+        "name": "webapp-destination",
+  
+        "url": "https://edraky-plan-map-demo.web.app",
+  
+        "authenticationType": "NoAuthentication",
+  
+        "proxyType": "Internet"
+  
+      }
+  
+    ]
+  
+  }
