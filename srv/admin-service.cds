@@ -1,12 +1,20 @@
 using { sap.capire.properties as db } from '../db/schema';
 
+ type MassUploadRet {
+    MapID: String; 
+    REFX:String; 
+    Status:Integer;
+    ErrorCode:Integer;
+    ErrorMessage: String;
+}
+
 service AdminService {
     entity Properties   as projection on db.Properties;
     entity Phases as projection on db.Phases;
     entity Projects as projection on db.Projects;
     entity MappingTable as projection on db.ERPTable;
     action MassUploadProjects (Projects : array of Projects) returns array of Projects;
-    action MassUploadMapping (Properties :array of MappingTable) returns String;
+    action MassUploadMapping (Properties :array of MappingTable) returns array of MassUploadRet;
     action ExportToTable () returns array of Properties;
     
     

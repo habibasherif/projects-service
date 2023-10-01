@@ -5,6 +5,7 @@ using { Currency, cuid, managed, sap.common.CodeList } from '@sap/cds/common';
 @assert.unique : {
    REFX: [ REFX ]
 }
+@Capabilities.Updatable :true
 @Capabilities.Deletable :true
 entity Properties : managed {
     REFX   :  String (111);
@@ -16,6 +17,7 @@ entity Properties : managed {
 }
 
 
+@Capabilities.Updatable :true
 @Capabilities.Deletable :true
 entity Phases {
     key ID   : Integer;
@@ -45,3 +47,5 @@ entity ERPTable{
     Phase : Association  to Phases;
     
 }
+
+

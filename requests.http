@@ -1,15 +1,15 @@
 
 ### Create Project
 
-POST  https:/localhost:8080/odata/v4/AdminService/Projects
+POST   http://localhost:8080/odata/v4/AdminService/Projects
 Content-Type: application/json
 Authorization: Basic authenticated:
 
-{"ID": 1 , "content":"content Test", "phases":[{"ID": 1,"content":"Phase Content"}]}
+{"ID": 1 , "content":"assets/global.svg","name":"Demo Project" ,"phases":[{"ID": 1,"content":"assets/phase01.svg","name":"Phase 01"},{"ID": 2,"content":"assets/phase02.svg","name":"Phase 02"},{"ID": 3,"content":"assets/phase03.svg","name":"Phase 03"},{"ID": 4,"content":"assets/phase04.svg","name":"Phase 04"}]}
 
 ### Create Phases
 
-Post  https://projects-service-triumphant-baboon-hl.cfapps.us10-001.hana.ondemand.com/odata/v4/AdminService/MassUploadMapping
+Post  http://localhost:8080/odata/v4/AdminService/MassUploadMapping
 Content-Type: application/json
 Authorization: Basic authenticated:
 
@@ -17,7 +17,11 @@ Authorization: Basic authenticated:
 {"Properties":
     [
 
-        {"REFX":"REFLK",  "MapID":"10","Project_ID":1,"Phase_ID":1}
+        {"REFX":"REFX2",  "MapID":"1","Project_ID":1,"Phase_ID":1},
+        {"REFX":"REFX2",  "MapID":"2","Project_ID":1,"Phase_ID":1},
+        {"REFX":"REFX3",  "MapID":"3","Project_ID":1,"Phase_ID":1},
+        {"REFX":"REFX4",  "MapID":"4","Project_ID":1,"Phase_ID":1}
+         
 
     ]
 
@@ -76,7 +80,7 @@ Authorization: Basic authenticated:
 
 ### Create Erp Table Mass Upload
 
-Post  https://map-plan-approuter-zany-gorilla-uu.cfapps.us10-001.hana.ondemand.com/mapping/1
+Post  http://localhost:8080/odata/v4/AdminService/MassUploadMapping
 Content-Type: application/json
 Authorization: Basic authenticated:
 

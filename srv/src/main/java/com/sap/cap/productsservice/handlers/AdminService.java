@@ -1,5 +1,11 @@
 package com.sap.cap.productsservice.handlers;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +32,7 @@ import cds.gen.adminservice.Projects;
 import cds.gen.adminservice.MassUploadMappingContext;
 import cds.gen.adminservice.MappingTable;
 import cds.gen.adminservice.MappingTable_;
+import cds.gen.MassUploadRet;
 
 
 @Component
@@ -72,10 +79,11 @@ public class AdminService implements EventHandler{
 
         //}
     }
+
+
     @On(event = MassUploadMappingContext.CDS_NAME)
     public void multipleEntries (MassUploadMappingContext context){
-        String result ="";
-        boolean flag=false;
+        List<MassUploadRet> toReturn = new ArrayList<>(); 
 
         for(MappingTable property : context.getProperties()){
             CqnSelect sel = Select.from(MappingTable_.class).where(p -> p.MapID().eq(property.getMapID()));
@@ -85,23 +93,34 @@ public class AdminService implements EventHandler{
                 CqnSelect sel2 = Select.from(MappingTable_.class).where(p -> p.REFX().eq(property.getRefx().toString()));
                 if(db.run(sel2).rowCount()>0){
                     if(!db.run(sel2).first().get().get("MapID").equals(property.getMapID().toString()) ){
-                        flag = true;
-                        result += "MapID: " + db.run(sel).first().get().get("MapID").toString() + " already exists with REFX: " + db.run(sel2).first().get().get("REFX").toString() +" /n";
+                        MassUploadRet ret = MassUploadRet.create();
+                        ret.setMapID(property.getMapID().toString());
+                        ret.setRefx(db.run(sel).first().get().get("REFX").toString());
+                        ret.setStatus(500);
+                        ret.setErrorCode(600); 
+                        ret.setErrorMessage("Duplication in REFX"); 
+                        toReturn.add(ret);
                     }
                     else{
                         CqnUpdate update = Update.entity("AdminService.MappingTable").data(property);
                         db.run(update); 
+                        MassUploadRet ret = MassUploadRet.create();
+                        ret.setMapID(property.getMapID().toString());
+                        ret.setRefx(property.getRefx().toString());
+                        ret.setStatus(200);
+                        toReturn.add(ret);
                         
 
                     }
                 }
                 else{
-                    
-                    //temp.setRefx(property.getRefx());
-                   
                     CqnUpdate update = Update.entity("AdminService.MappingTable").data(property);
-                    
                     db.run(update); 
+                    MassUploadRet ret = MassUploadRet.create();
+                    ret.setMapID(property.getMapID().toString());
+                    ret.setRefx(property.getRefx().toString());
+                    ret.setStatus(200);
+                    toReturn.add(ret);
                 }
 
 
@@ -110,13 +129,23 @@ public class AdminService implements EventHandler{
                 CqnSelect sel3 = Select.from(MappingTable_.class).where(p -> p.REFX().eq(property.getRefx()));
                 if(db.run(sel3).rowCount()>0){
                     if(!db.run(sel3).first().get().get("MapID").equals( property.getMapID())){
-                        flag = true;
-                        result += "REFX: "+ property.getRefx().toString()+ " already exists with MapID: " +db.run(sel3).first().get().get("MapID")+" /n";
+                        MassUploadRet ret = MassUploadRet.create();
+                        ret.setMapID(property.getMapID().toString());
+                        ret.setRefx(db.run(sel3).first().get().get("REFX").toString());
+                        ret.setStatus(500);
+                        ret.setErrorCode(600); 
+                        ret.setErrorMessage("Duplication in REFX"); 
+                        toReturn.add(ret);
                     }
                     else{
                         CqnUpdate update = Update.entity("AdminService.MappingTable").data(property);
 
                         db.run(update); 
+                        MassUploadRet ret = MassUploadRet.create();
+                        ret.setMapID(property.getMapID().toString());
+                        ret.setRefx(property.getRefx().toString());
+                        ret.setStatus(200);
+                        toReturn.add(ret);
 
                     }   
                 }
@@ -124,36 +153,23 @@ public class AdminService implements EventHandler{
 
                     CqnInsert insert = Insert.into("AdminService.MappingTable").entry(property);
                     db.run(insert);
+                    MassUploadRet ret = MassUploadRet.create();
+                    ret.setMapID(property.getMapID().toString());
+                    ret.setRefx(property.getRefx().toString());
+                    ret.setStatus(200);
+                    toReturn.add(ret);
                 }
 
             }
         }
 
-        if(!flag){
-            result = "Success";
-        }
         
-        context.setResult(result);
+        
+        context.setResult(toReturn);
         
 
     }
 
-    // @On(event = ExportToTableContext.CDS_NAME)
-    // public void totest (ExportToTableContext context){
-    //     CqnSelect sel = Select.from(ERPTable_.class);
-      
-    //     db.run(sel).forEach(p -> {
-    //         Map <String , String> erp = new HashMap<>();
-    //         erp.put("REFX", p.get("REFX").toString());
-    //         erp.put("MapID", p.get("MapID").toString());
-    //         CqnInsert insert = Insert.into("ExportTable.Property").entry(erp);
-
-    //     });
-
-        
-
-    //    context.setResult("Success");
    
-    // }
     
 }
