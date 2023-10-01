@@ -9,9 +9,11 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.sap.cds.ql.Delete;
 import com.sap.cds.ql.Insert;
 import com.sap.cds.ql.Select;
 import com.sap.cds.ql.Update;
+import com.sap.cds.ql.cqn.CqnDelete;
 import com.sap.cds.ql.cqn.CqnInsert;
 import com.sap.cds.ql.cqn.CqnSelect;
 import com.sap.cds.ql.cqn.CqnUpdate;
@@ -26,6 +28,8 @@ import com.sap.cds.services.persistence.PersistenceService;
 
 import cds.gen.adminservice.AdminService_;
 import cds.gen.adminservice.Properties_;
+import cds.gen.adminservice.Properties;
+
 import cds.gen.adminservice.Properties_;
 import cds.gen.adminservice.MassUploadProjectsContext;
 import cds.gen.adminservice.Projects;
@@ -33,6 +37,7 @@ import cds.gen.adminservice.MassUploadMappingContext;
 import cds.gen.adminservice.MappingTable;
 import cds.gen.adminservice.MappingTable_;
 import cds.gen.MassUploadRet;
+import cds.gen.adminservice.ExportToTableContext;
 
 
 @Component
@@ -167,6 +172,29 @@ public class AdminService implements EventHandler{
         
         context.setResult(toReturn);
         
+
+    }
+
+
+    @On (event = ExportToTableContext.CDS_NAME)
+    public void ExportToTable(ExportToTableContext context){
+        CqnSelect sel = Select.from(MappingTable_.class);
+        List<MappingTable> mappings=db.run(sel).listOf(MappingTable.class);
+        for(MappingTable map : mappings){
+            Properties property = Properties.create();
+            property.setMapID(map.getMapID());
+            property.setRefx(map.getRefx());
+            property.setPhaseId(map.getPhaseId());
+            CqnInsert insert = Insert.into("AdminService.Properties").entry(property);
+            db.run(insert);
+            CqnDelete delete = Delete.from(MappingTable_.class)
+            .where(b -> b.MapID().eq(property.getMapID()));
+            db.run(delete);
+        }
+        
+        CqnSelect sel2 = Select.from(Properties_.class);
+        context.setResult(db.run(sel2).listOf(Properties.class));
+
 
     }
 

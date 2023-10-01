@@ -37,6 +37,7 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+			
 
 			<!-- SPRING BOOT -->
 			<dependency>
@@ -46,6 +47,7 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+			
 		</dependencies>
 	</dependencyManagement>
 
