@@ -15,7 +15,7 @@ service AdminService {
     entity MappingTable as projection on db.ERPTable;
     action MassUploadProjects (Projects : array of Projects) returns array of Projects;
     action MassUploadMapping (Properties :array of MappingTable) returns array of MassUploadRet;
-    action ExportToTable () returns array of Properties;
+    action ExportToTable (Phase_ID: Integer , Project_ID: Integer) returns array of Properties;
     
     
 }

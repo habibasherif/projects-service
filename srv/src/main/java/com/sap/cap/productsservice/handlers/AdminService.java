@@ -103,7 +103,7 @@ public class AdminService implements EventHandler{
                         ret.setRefx(db.run(sel).first().get().get("REFX").toString());
                         ret.setStatus(500);
                         ret.setErrorCode(600); 
-                        ret.setErrorMessage("Duplication in REFX"); 
+                        ret.setErrorMessage("Duplication in REFX ("+property.getRefx()+")"); 
                         toReturn.add(ret);
                     }
                     else{
@@ -139,7 +139,7 @@ public class AdminService implements EventHandler{
                         ret.setRefx(db.run(sel3).first().get().get("REFX").toString());
                         ret.setStatus(500);
                         ret.setErrorCode(600); 
-                        ret.setErrorMessage("Duplication in REFX"); 
+                        ret.setErrorMessage("Duplication in REFX ("+property.getRefx()+")"); 
                         toReturn.add(ret);
                     }
                     else{
@@ -178,7 +178,7 @@ public class AdminService implements EventHandler{
 
     @On (event = ExportToTableContext.CDS_NAME)
     public void ExportToTable(ExportToTableContext context){
-        CqnSelect sel = Select.from(MappingTable_.class);
+        CqnSelect sel = Select.from(MappingTable_.class).where(p -> p.Project_ID().eq((context.getProjectId())) .and( p.Phase_ID().eq((context.getPhaseId())))); 
         List<MappingTable> mappings=db.run(sel).listOf(MappingTable.class);
         for(MappingTable map : mappings){
             Properties property = Properties.create();
@@ -187,9 +187,9 @@ public class AdminService implements EventHandler{
             property.setPhaseId(map.getPhaseId());
             CqnInsert insert = Insert.into("AdminService.Properties").entry(property);
             db.run(insert);
-            CqnDelete delete = Delete.from(MappingTable_.class)
-            .where(b -> b.MapID().eq(property.getMapID()));
-            db.run(delete);
+            //CqnDelete delete = Delete.from(MappingTable_.class)
+           // .where(b -> b.MapID().eq(property.getMapID()));
+            //db.run(delete);
         }
         
         CqnSelect sel2 = Select.from(Properties_.class);

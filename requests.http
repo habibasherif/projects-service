@@ -35,6 +35,10 @@ Content-Type: application/json
 Authorization: Basic authenticated:
 
 
+{"Phase_ID":"1",
+"Project_ID":"1"}
+
+
 
 
 
