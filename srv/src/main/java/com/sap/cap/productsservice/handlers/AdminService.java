@@ -30,7 +30,7 @@ import cds.gen.adminservice.MassUploadProjectsContext;
 import cds.gen.adminservice.Phases;
 import cds.gen.adminservice.Properties;
 import cds.gen.adminservice.Properties_;
-
+import cds.gen.adminservice.TestConnectionContext;
 
 @Component
 @ServiceName(AdminService_.CDS_NAME)
@@ -203,6 +203,17 @@ public class AdminService implements EventHandler{
        db.run(insert);
         
         
+    }
+
+    @On(event = TestConnectionContext.CDS_NAME)
+    public void TestConnection (TestConnectionContext context){
+       // for(Projects project : context.getProjects()){
+        CqnInsert insert = Insert.into("AdminService.Projects").entries(context.getProjects());
+        db.run(insert);
+        context.setResult(context.getProjects());
+
+
+        //}
     }
 
    
