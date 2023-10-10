@@ -1,5 +1,5 @@
 const stompClient = new StompJs.Client({
-    brokerURL: 'wss://port8080-workspaces-ws-t6wgk.us10.trial.applicationstudio.cloud.sap/gs-guide-websocket'
+    brokerURL: 'wss://port8080-workspaces-ws-t6wgk.us10.trial.applicationstudio.cloud.sap'
 });
 
 stompClient.onConnect = (frame) => {

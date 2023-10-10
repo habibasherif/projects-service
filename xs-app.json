@@ -1,59 +1,32 @@
 {
-    "websockets": {
-      "enabled": true
+  "welcomeFile": "HTML5Module/index.html",
+  "authenticationMethod": "none",
+  "websockets": {
+    "enabled": true
+  },
+  "logout": {
+    "logoutEndpoint": "/do/logout"
+  },
+  "routes": [
+    {
+      "source": "^/NodeWS(.*)$",
+      "target": "$1",
+      "authenticationType": "none",
+      "destination": "NodeWs_api",
+      "csrfProtection": false
     },
-
-
-    "routes": [
-  
-      {
-  
-        "source": "^/api/(.*)$",
-  
-        "target": "$1",
-  
-        "destination": "my-destination"
-  
-      },
-  
-      {
-  
-        "source": "(.*)",
-  
-        "target": "$1",
-  
-        "destination": "webapp-destination"
-  
-      }
-  
-    ],
-  
-    "destinations": [
-  
-      {
-  
-        "name": "my-destination",
-  
-        "url": "https://projects-service-triumphant-baboon-hl.cfapps.us10-001.hana.ondemand.com",
-  
-        "authenticationType": "NoAuthentication",
-  
-        "proxyType": "Internet"
-  
-      },
-  
-      {
-  
-        "name": "webapp-destination",
-  
-        "url": "https://edraky-plan-map-demo.web.app",
-  
-        "authenticationType": "NoAuthentication",
-  
-        "proxyType": "Internet"
-  
-      }
-  
-    ]
-  
-  }
+    {
+      "source": "^/odataSrv/(.*)$",
+      "target": "/catalog/$1",
+      "authenticationType": "none",
+      "destination": "srv_api",
+      "csrfProtection": false
+    },
+    {
+      "source": "^/HTML5Module/(.*)$",
+      "target": "$1",
+      "authenticationType": "none",
+      "localDir": "../HTML5Module/webapp"
+    }
+  ]
+}
