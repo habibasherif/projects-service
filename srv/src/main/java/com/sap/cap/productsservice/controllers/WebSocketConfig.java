@@ -1,3 +1,4 @@
+package com.sap.cap.productsservice.controllers;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

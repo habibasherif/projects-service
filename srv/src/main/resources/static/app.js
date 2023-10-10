@@ -1,5 +1,6 @@
 const stompClient = new StompJs.Client({
-    brokerURL: 'wss://port8080-workspaces-ws-t6wgk.us10.trial.applicationstudio.cloud.sap'
+    brokerURL: 'ws://localhost:8080/gs-guide-websocket'
+>>>>>>> f122372a9a1b435035dfb90ff8706a1816c93890
 });
 
 stompClient.onConnect = (frame) => {
@@ -43,12 +44,35 @@ function disconnect() {
     console.log("Disconnected");
 }
 
+// function sendName() {
+//     console.log($("#numberInput").val());
+//     stompClient.publish({
+//         destination: "/app/hello",
+        
+//         body: parseInt($("#numberInput").val())
+//     });
+//     console.log("Inside send name")
+// }
+
 function sendName() {
+    
+    
+    const context ={
+        eventId: 123,
+        eventName: 'Create',
+        entries: $("#jsonInput").val()
+      };
+    console.log($("#jsonInput").val());
     stompClient.publish({
         destination: "/app/hello",
-        body: JSON.stringify({'message': $("#message").val()})
+        
+        body: $("#jsonInput").val()
+        //JSON.stringify($("#jsonInput").val())
     });
+    console.log("Inside send name")
 }
+
+
 
 function showGreeting(message) {
     $("#greetings").append("<tr><td>" + message + "</td></tr>");

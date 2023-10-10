@@ -1,23 +1,17 @@
 package com.sap.cap.productsservice.handlers;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.sap.cds.ql.Delete;
 import com.sap.cds.ql.Insert;
 import com.sap.cds.ql.Select;
 import com.sap.cds.ql.Update;
-import com.sap.cds.ql.cqn.CqnDelete;
 import com.sap.cds.ql.cqn.CqnInsert;
 import com.sap.cds.ql.cqn.CqnSelect;
 import com.sap.cds.ql.cqn.CqnUpdate;
-import com.sap.cds.services.ServiceException;
 import com.sap.cds.services.cds.CdsCreateEventContext;
 import com.sap.cds.services.cds.CqnService;
 import com.sap.cds.services.handler.EventHandler;
@@ -26,18 +20,16 @@ import com.sap.cds.services.handler.annotations.ServiceName;
 import com.sap.cds.services.messages.Messages;
 import com.sap.cds.services.persistence.PersistenceService;
 
+import cds.gen.MassUploadRet;
 import cds.gen.adminservice.AdminService_;
-import cds.gen.adminservice.Properties_;
-import cds.gen.adminservice.Properties;
-
-import cds.gen.adminservice.Properties_;
-import cds.gen.adminservice.MassUploadProjectsContext;
-import cds.gen.adminservice.Projects;
-import cds.gen.adminservice.MassUploadMappingContext;
+import cds.gen.adminservice.ExportToTableContext;
 import cds.gen.adminservice.MappingTable;
 import cds.gen.adminservice.MappingTable_;
-import cds.gen.MassUploadRet;
-import cds.gen.adminservice.ExportToTableContext;
+import cds.gen.adminservice.MassUploadMappingContext;
+import cds.gen.adminservice.MassUploadProjectsContext;
+import cds.gen.adminservice.Phases;
+import cds.gen.adminservice.Properties;
+import cds.gen.adminservice.Properties_;
 
 
 @Component
@@ -102,13 +94,13 @@ public class AdminService implements EventHandler{
                         ret.setMapID(property.getMapID().toString());
                         ret.setRefx(db.run(sel).first().get().get("REFX").toString());
                         ret.setStatus(500);
-                        ret.setErrorCode(600); 
+                        ret.setErrorCode(600);
                         ret.setErrorMessage("Duplication in REFX ("+property.getRefx()+")"); 
                         toReturn.add(ret);
                     }
                     else{
                         CqnUpdate update = Update.entity("AdminService.MappingTable").data(property);
-                        db.run(update); 
+                        db.run(update);
                         MassUploadRet ret = MassUploadRet.create();
                         ret.setMapID(property.getMapID().toString());
                         ret.setRefx(property.getRefx().toString());
@@ -120,7 +112,7 @@ public class AdminService implements EventHandler{
                 }
                 else{
                     CqnUpdate update = Update.entity("AdminService.MappingTable").data(property);
-                    db.run(update); 
+                    db.run(update);
                     MassUploadRet ret = MassUploadRet.create();
                     ret.setMapID(property.getMapID().toString());
                     ret.setRefx(property.getRefx().toString());
@@ -138,21 +130,21 @@ public class AdminService implements EventHandler{
                         ret.setMapID(property.getMapID().toString());
                         ret.setRefx(db.run(sel3).first().get().get("REFX").toString());
                         ret.setStatus(500);
-                        ret.setErrorCode(600); 
-                        ret.setErrorMessage("Duplication in REFX ("+property.getRefx()+")"); 
+                        ret.setErrorCode(600);
+                        ret.setErrorMessage("Duplication in REFX ("+property.getRefx()+")");
                         toReturn.add(ret);
                     }
                     else{
                         CqnUpdate update = Update.entity("AdminService.MappingTable").data(property);
 
-                        db.run(update); 
+                        db.run(update);
                         MassUploadRet ret = MassUploadRet.create();
                         ret.setMapID(property.getMapID().toString());
                         ret.setRefx(property.getRefx().toString());
                         ret.setStatus(200);
                         toReturn.add(ret);
 
-                    }   
+                    }
                 }
                 else{
 
@@ -196,6 +188,21 @@ public class AdminService implements EventHandler{
         context.setResult(db.run(sel2).listOf(Properties.class));
 
 
+    }
+
+
+    
+    
+    public void testStomp (Phases phase){
+
+       // HelloMessage m = new HelloMessage(context.toString());
+
+       // return new ReturnedGreeting(HtmlUtils.htmlEscape(m.getMessage()));
+       
+       CqnInsert insert = Insert.into("AdminService.Phases").entry(phase);
+       db.run(insert);
+        
+        
     }
 
    
