@@ -1,3 +1,5 @@
+package com.sap.cap.productsservice.TestingStomp;
+
 public class ReturnedGreeting{
 
     private String content;
