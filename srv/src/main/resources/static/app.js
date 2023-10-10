@@ -1,6 +1,5 @@
 const stompClient = new StompJs.Client({
     brokerURL: 'ws://localhost:8080/gs-guide-websocket'
->>>>>>> f122372a9a1b435035dfb90ff8706a1816c93890
 });
 
 stompClient.onConnect = (frame) => {
