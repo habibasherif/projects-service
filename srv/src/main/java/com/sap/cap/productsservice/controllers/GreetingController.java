@@ -56,7 +56,7 @@ public class GreetingController {
 
     
     
-    return new ReturnedGreeting(HtmlUtils.htmlEscape(context.toString()));
+    return new ReturnedGreeting(HtmlUtils.htmlEscape("Change in Phase"));
    }
 
 }

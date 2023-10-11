@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
+import com.sap.cap.productsservice.TestingStomp.ReturnedGreeting;
 import com.sap.cds.ql.Insert;
 import com.sap.cds.ql.Select;
 import com.sap.cds.ql.Update;
@@ -13,6 +16,7 @@ import com.sap.cds.ql.cqn.CqnInsert;
 import com.sap.cds.ql.cqn.CqnSelect;
 import com.sap.cds.ql.cqn.CqnUpdate;
 import com.sap.cds.services.cds.CdsCreateEventContext;
+import com.sap.cds.services.cds.CdsUpdateEventContext;
 import com.sap.cds.services.cds.CqnService;
 import com.sap.cds.services.handler.EventHandler;
 import com.sap.cds.services.handler.annotations.On;
@@ -41,6 +45,7 @@ public class AdminService implements EventHandler{
     @Autowired
     Messages messages;
 
+    private final SimpMessagingTemplate messagingTemplate;
 
     @On(event= CqnService.EVENT_CREATE, entity = "AdminService.Properties")
     public void onCreate (CdsCreateEventContext context) {
@@ -205,15 +210,56 @@ public class AdminService implements EventHandler{
         
     }
 
+    @SendTo("/topic/greetings")
     @On(event = TestConnectionContext.CDS_NAME)
     public void TestConnection (TestConnectionContext context){
        // for(Projects project : context.getProjects()){
-        CqnInsert insert = Insert.into("AdminService.Projects").entries(context.getProjects());
+        CqnInsert insert = Insert.into("AdminService.Phases").entry(context.getPhase());
         db.run(insert);
-        context.setResult(context.getProjects());
+        context.setResult("{Project ID: " +context.getPhase().getProjectId() + ", \"PhaseID\": " + context.getPhase().getId() +"}" );
+        System.out.println("Should post1");
+
+       // publishToWebSocket("{\"ProjectID\": " +context.getPhase().getProjectId() + ", \"PhaseID\": " + context.getPhase().getId() +"}" );
+        System.out.println("Should post");
+    }
 
 
-        //}
+
+    public void publishToWebSocket(String message ,String project , String phase) {
+        System.out.println("Here");
+        messagingTemplate.convertAndSend("/topic/App",  new ReturnedGreeting(message));
+        messagingTemplate.convertAndSend("/topic/Project/"+project,  new ReturnedGreeting(message));
+        messagingTemplate.convertAndSend("/topic/Phase/"+phase,  new ReturnedGreeting(message));
+        String greeting = "greetings";
+        messagingTemplate.convertAndSend("/topic/"+greeting,  new ReturnedGreeting(message));
+
+
+
+
+        System.out.println("DONEE");
+
+    }
+
+    
+
+    @Autowired
+    public AdminService(SimpMessagingTemplate messagingTemplate) {
+        this.messagingTemplate = messagingTemplate;
+    }
+
+    @On(event= CqnService.EVENT_UPDATE, entity = "AdminService.Properties")
+    public void onUpdate (CdsUpdateEventContext context) {
+        System.out.println(context.getCqn().entries().get(0).toString());
+        //System.out.println("Project: "+context.getCqn().entries().get(0).get("Project_ID").toString() +", Phase: "+context.getCqn().entries().get(0).get("Phase_ID").toString());
+
+        CqnSelect select = Select.from("AdminService.Phases").byId(Integer.parseInt(context.getCqn().entries().get(0).get("Phase_ID").toString()));
+
+        //Phase phase = db.run(select).
+
+        Phases phase = db.run(select).listOf(Phases.class).get(0);
+        publishToWebSocket((context.getCqn().entries().get(0).toString()),phase.getProjectId().toString(),context.getCqn().entries().get(0).get("Phase_ID").toString());
+
+
     }
 
    

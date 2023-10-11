@@ -1,5 +1,5 @@
 const stompClient = new StompJs.Client({
-    brokerURL: 'wss://port8080-workspaces-ws-t6wgk.us10.trial.applicationstudio.cloud.sap/gs-guide-websocket'
+    brokerURL: 'ws://localhost:8080/gs-guide-websocket'
 });
 
 stompClient.onConnect = (frame) => {
@@ -74,6 +74,7 @@ function sendName() {
 
 
 function showGreeting(message) {
+    console.log('Inside greeting')
     $("#greetings").append("<tr><td>" + message + "</td></tr>");
 }
 
