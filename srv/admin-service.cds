@@ -8,6 +8,7 @@ using { sap.capire.properties as db } from '../db/schema';
     ErrorMessage: String;
 }
 
+
 service AdminService {
     entity Properties   as projection on db.Properties;
     entity Phases as projection on db.Phases;
@@ -27,3 +28,11 @@ service PropertyService {
     function getPropertyByMapID(MapID:String) returns String;
 }
 
+service UserService {
+    @readonly entity Properties as projection on db.Properties;
+    @readonly entity Projects as projection on db.Projects;
+    @readonly entity Phases as projection on db.Phases;
+    action SellProperty(Property : Properties , User : String) returns MassUploadRet;
+
+    
+}
