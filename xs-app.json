@@ -1,5 +1,4 @@
 {
-  "welcomeFile": "HTML5Module/index.html",
   "authenticationMethod": "none",
   "websockets": {
     "enabled": true
@@ -21,12 +20,6 @@
       "authenticationType": "none",
       "destination": "srv_api",
       "csrfProtection": false
-    },
-    {
-      "source": "^/HTML5Module/(.*)$",
-      "target": "$1",
-      "authenticationType": "none",
-      "localDir": "../HTML5Module/webapp"
     }
   ]
 }
