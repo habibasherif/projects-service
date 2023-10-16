@@ -41,7 +41,7 @@ public class UserService implements EventHandler{
        // for(Projects project : context.getProjects()){
 
         Properties prop = context.getProperty();
-        if(prop.getStatus().equals("Sold")){
+        if(prop.getStatus().equalsIgnoreCase("Sold")){
 
             CqnSelect sel = Select.from(Properties_.class).where(p -> p.REFX().eq(prop.getRefx().toString()));
 
@@ -57,7 +57,8 @@ public class UserService implements EventHandler{
                 return;
             }
             String status = db.run(sel).first().get().get("Status").toString();
-            if(status.equals("Available")){
+            if(status.equalsIgnoreCase("Available")){
+                prop.setStatus("Sold");
                 CqnUpsert upsert = Upsert.into(Properties_.class).entry(prop);
                 db.run(upsert);
 

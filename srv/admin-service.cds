@@ -28,7 +28,9 @@ service PropertyService {
     function getPropertyByMapID(MapID:String) returns String;
 }
 
-service UserService {
+
+
+service UserService{
     @readonly entity Properties as projection on db.Properties;
     @readonly entity Projects as projection on db.Projects;
     @readonly entity Phases as projection on db.Phases;
@@ -36,3 +38,5 @@ service UserService {
 
     
 }
+
+annotate UserService with @(requires: 'any');

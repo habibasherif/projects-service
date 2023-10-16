@@ -8,6 +8,10 @@ spring:
     allowed-headers: Authorization, Content-Type
     allow-credentials: true
     max-age: 3600
+  security:
+    user:
+      name: anonymous
+      password:
 cds:
   datasource.auto-config.enabled: false
   sql.supportedLocales: "*"
