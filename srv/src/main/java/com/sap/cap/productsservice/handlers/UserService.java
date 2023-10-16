@@ -62,12 +62,35 @@ public class UserService implements EventHandler{
                 CqnUpsert upsert = Upsert.into(Properties_.class).entry(prop);
                 db.run(upsert);
 
-                sendCall(context.getUser());
-                MassUploadRet ret = MassUploadRet.create();
-                ret.setMapID(prop.getMapID());
-                ret.setRefx(prop.getRefx());
-                ret.setStatus(200);
-                context.setResult(ret);
+                if(context.getUser()==null){
+                    MassUploadRet ret = MassUploadRet.create();
+                    ret.setMapID(prop.getMapID());
+                    ret.setRefx(prop.getRefx());
+                    ret.setStatus(500);
+                    ret.setErrorCode(503);
+                    ret.setErrorMessage("Error in Lead Creation");
+                    context.setResult(ret);
+
+                }
+                else{
+                if(sendCall(context.getUser()).equals("OK")){
+                    MassUploadRet ret = MassUploadRet.create();
+                    ret.setMapID(prop.getMapID());
+                    ret.setRefx(prop.getRefx());
+                    ret.setStatus(200);
+                    context.setResult(ret);
+                }
+                else{
+
+                    MassUploadRet ret = MassUploadRet.create();
+                    ret.setMapID(prop.getMapID());
+                    ret.setRefx(prop.getRefx());
+                    ret.setStatus(500);
+                    ret.setErrorCode(503);
+                    ret.setErrorMessage("Error in Lead Creation");
+                    context.setResult(ret);
+                }
+            }
 
             }
             else{
@@ -89,7 +112,7 @@ public class UserService implements EventHandler{
         //}
     }
 
-    public void sendCall(String user){
+    public String sendCall(String user){
          String url = "https://edraky-development-environment-m6cksw9c.it-cpi024-rt.cfapps.eu10-002.hana.ondemand.com/http/MasterApp/C4C/Lead";
     HttpMethod method = HttpMethod.POST;
 
@@ -114,9 +137,12 @@ public class UserService implements EventHandler{
     if (response.getStatusCode().is2xxSuccessful()) {
         String responseBody = response.getBody();
         // Process the response body
+        return "OK";
     } else {
         // Handle the error case
+        return "NO";
     }
+    
 
 
     }
