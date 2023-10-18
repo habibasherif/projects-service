@@ -12,9 +12,11 @@ import com.sap.cap.productsservice.TestingStomp.ReturnedGreeting;
 import com.sap.cds.ql.Insert;
 import com.sap.cds.ql.Select;
 import com.sap.cds.ql.Update;
+import com.sap.cds.ql.Upsert;
 import com.sap.cds.ql.cqn.CqnInsert;
 import com.sap.cds.ql.cqn.CqnSelect;
 import com.sap.cds.ql.cqn.CqnUpdate;
+import com.sap.cds.ql.cqn.CqnUpsert;
 import com.sap.cds.services.cds.CdsCreateEventContext;
 import com.sap.cds.services.cds.CdsUpdateEventContext;
 import com.sap.cds.services.cds.CqnService;
@@ -35,6 +37,7 @@ import cds.gen.adminservice.Phases;
 import cds.gen.adminservice.Properties;
 import cds.gen.adminservice.Properties_;
 import cds.gen.adminservice.TestConnectionContext;
+import cds.gen.adminservice.PopulateContext;
 
 @Component
 @ServiceName(AdminService_.CDS_NAME)
@@ -82,6 +85,24 @@ public class AdminService implements EventHandler{
         //}
     }
 
+    @On(event = PopulateContext.CDS_NAME)
+    public void Populate (PopulateContext context){
+      
+        CqnSelect sel = Select.from(Properties_.class);
+        List<Properties> properties= db.run(sel).listOf(Properties.class);
+        for(Properties property : properties){
+            
+            property.setStatus("available");
+            //property.setDimensions(304.5);
+            
+        }
+        CqnUpsert upsert = Upsert.into("AdminService.Properties").entries(properties);
+        db.run(upsert);
+        context.setCompleted();
+
+
+        //}
+    }
 
     @On(event = MassUploadMappingContext.CDS_NAME)
     public void multipleEntries (MassUploadMappingContext context){

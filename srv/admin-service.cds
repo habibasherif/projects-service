@@ -18,6 +18,7 @@ service AdminService {
     action MassUploadMapping (Properties :array of MappingTable) returns array of MassUploadRet;
     action ExportToTable (Phase_ID: Integer , Project_ID: Integer) returns array of Properties;
     action TestConnection (phase : Phases) returns String;
+    action Populate();
     
     
 }

@@ -2,7 +2,8 @@
   
   "authenticationMethod": "none",
   "websockets": {
-    "enabled": true
+    "enabled": true,
+    "authenticationMethod":"none"
   },
   "logout": {
     "logoutEndpoint": "/do/logout"

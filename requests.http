@@ -9,14 +9,14 @@ Authorization: Basic authenticated:
 
 ### Create Phases
 
-Post  http://localhost:8080/odata/v4/AdminService/Properties
+Post  http://localhost:8080/odata/v4/AdminService/Populate
 Content-Type: application/json
 Authorization: Basic authenticated:
 
 
 
 
-        {"REFX":"REFX2",  "MapID":"2","Phase_ID":1,"Status":"Available"}
+        
        
 
 

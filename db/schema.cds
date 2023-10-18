@@ -11,8 +11,11 @@ entity Properties : managed {
     REFX   :  String (111);
     Key MapID: String (111);
     Path    : localized String(1111);
-    Status : String (111);
+    Status : String (111) default 'availale';
     Phase    : Association to Phases;
+    Dimensions : Double;
+    Block : String (111);
+    Number : String (111);
    
 }
 
@@ -33,6 +36,7 @@ entity Projects {
     phases : Composition of many Phases on phases.project=$self;
     content : String(111);
     name : String (111);
+    image: String (111);
 
 }
 

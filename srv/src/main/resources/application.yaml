@@ -12,6 +12,11 @@ spring:
     user:
       name: anonymous
       password:
+  websocket:
+    enabled: true
+    mapping:
+      path: /gs-guide-websocket
+    allowed-origins: "*"
 cds:
   datasource.auto-config.enabled: false
   sql.supportedLocales: "*"

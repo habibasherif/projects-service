@@ -58,7 +58,7 @@ public class UserService implements EventHandler{
             }
             String status = db.run(sel).first().get().get("Status").toString();
             if(status.equalsIgnoreCase("Available")){
-                prop.setStatus("Sold");
+                prop.setStatus("sold");
                 CqnUpsert upsert = Upsert.into(Properties_.class).entry(prop);
                 db.run(upsert);
 
