@@ -1,9 +1,6 @@
 const stompClient = new StompJs.Client({
-    brokerURL: 'wss://authenticated:@projects-service-triumphant-baboon-hl.cfapps.us10-001.hana.ondemand.com/gs-guide-websocket',
-    connectHeaders: {
-        login: 'authenticated',
-        passcode:''
-    }
+    brokerURL: 'wss://projects-service-triumphant-baboon-hl.cfapps.us10-001.hana.ondemand.com/gs-guide-websocket',
+    
 });
 
 stompClient.onConnect = (frame) => {
