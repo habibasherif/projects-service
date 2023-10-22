@@ -6,6 +6,7 @@
     "repository": "<Add your repository here>",
     "dependencies": {
         "@sap/approuter": "^14.3.2",
-        "approuter": "^0.0.1-security"
+        "approuter": "^0.0.1-security",
+        "ws": "^8.14.2"
     }
 }

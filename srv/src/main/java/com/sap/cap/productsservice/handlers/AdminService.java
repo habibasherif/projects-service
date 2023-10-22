@@ -1,24 +1,24 @@
 package com.sap.cap.productsservice.handlers;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
-import com.sap.cds.ql.Delete;
+import com.sap.cap.productsservice.TestingStomp.ReturnedGreeting;
 import com.sap.cds.ql.Insert;
 import com.sap.cds.ql.Select;
 import com.sap.cds.ql.Update;
-import com.sap.cds.ql.cqn.CqnDelete;
+import com.sap.cds.ql.Upsert;
 import com.sap.cds.ql.cqn.CqnInsert;
 import com.sap.cds.ql.cqn.CqnSelect;
 import com.sap.cds.ql.cqn.CqnUpdate;
-import com.sap.cds.services.ServiceException;
+import com.sap.cds.ql.cqn.CqnUpsert;
 import com.sap.cds.services.cds.CdsCreateEventContext;
+import com.sap.cds.services.cds.CdsUpdateEventContext;
 import com.sap.cds.services.cds.CqnService;
 import com.sap.cds.services.handler.EventHandler;
 import com.sap.cds.services.handler.annotations.On;
@@ -26,19 +26,18 @@ import com.sap.cds.services.handler.annotations.ServiceName;
 import com.sap.cds.services.messages.Messages;
 import com.sap.cds.services.persistence.PersistenceService;
 
+import cds.gen.MassUploadRet;
 import cds.gen.adminservice.AdminService_;
-import cds.gen.adminservice.Properties_;
-import cds.gen.adminservice.Properties;
-
-import cds.gen.adminservice.Properties_;
-import cds.gen.adminservice.MassUploadProjectsContext;
-import cds.gen.adminservice.Projects;
-import cds.gen.adminservice.MassUploadMappingContext;
+import cds.gen.adminservice.ExportToTableContext;
 import cds.gen.adminservice.MappingTable;
 import cds.gen.adminservice.MappingTable_;
-import cds.gen.MassUploadRet;
-import cds.gen.adminservice.ExportToTableContext;
-
+import cds.gen.adminservice.MassUploadMappingContext;
+import cds.gen.adminservice.MassUploadProjectsContext;
+import cds.gen.adminservice.Phases;
+import cds.gen.adminservice.Properties;
+import cds.gen.adminservice.Properties_;
+import cds.gen.adminservice.TestConnectionContext;
+import cds.gen.adminservice.PopulateContext;
 
 @Component
 @ServiceName(AdminService_.CDS_NAME)
@@ -49,6 +48,7 @@ public class AdminService implements EventHandler{
     @Autowired
     Messages messages;
 
+    private final SimpMessagingTemplate messagingTemplate;
 
     @On(event= CqnService.EVENT_CREATE, entity = "AdminService.Properties")
     public void onCreate (CdsCreateEventContext context) {
@@ -85,6 +85,24 @@ public class AdminService implements EventHandler{
         //}
     }
 
+    @On(event = PopulateContext.CDS_NAME)
+    public void Populate (PopulateContext context){
+      
+        CqnSelect sel = Select.from(Properties_.class);
+        List<Properties> properties= db.run(sel).listOf(Properties.class);
+        for(Properties property : properties){
+            
+            property.setStatus("available");
+            //property.setDimensions(304.5);
+            
+        }
+        CqnUpsert upsert = Upsert.into("AdminService.Properties").entries(properties);
+        db.run(upsert);
+        context.setCompleted();
+
+
+        //}
+    }
 
     @On(event = MassUploadMappingContext.CDS_NAME)
     public void multipleEntries (MassUploadMappingContext context){
@@ -102,13 +120,13 @@ public class AdminService implements EventHandler{
                         ret.setMapID(property.getMapID().toString());
                         ret.setRefx(db.run(sel).first().get().get("REFX").toString());
                         ret.setStatus(500);
-                        ret.setErrorCode(600); 
-                        ret.setErrorMessage("Duplication in REFX"); 
+                        ret.setErrorCode(600);
+                        ret.setErrorMessage("Duplication in REFX ("+property.getRefx()+")"); 
                         toReturn.add(ret);
                     }
                     else{
                         CqnUpdate update = Update.entity("AdminService.MappingTable").data(property);
-                        db.run(update); 
+                        db.run(update);
                         MassUploadRet ret = MassUploadRet.create();
                         ret.setMapID(property.getMapID().toString());
                         ret.setRefx(property.getRefx().toString());
@@ -120,7 +138,7 @@ public class AdminService implements EventHandler{
                 }
                 else{
                     CqnUpdate update = Update.entity("AdminService.MappingTable").data(property);
-                    db.run(update); 
+                    db.run(update);
                     MassUploadRet ret = MassUploadRet.create();
                     ret.setMapID(property.getMapID().toString());
                     ret.setRefx(property.getRefx().toString());
@@ -138,21 +156,21 @@ public class AdminService implements EventHandler{
                         ret.setMapID(property.getMapID().toString());
                         ret.setRefx(db.run(sel3).first().get().get("REFX").toString());
                         ret.setStatus(500);
-                        ret.setErrorCode(600); 
-                        ret.setErrorMessage("Duplication in REFX"); 
+                        ret.setErrorCode(600);
+                        ret.setErrorMessage("Duplication in REFX ("+property.getRefx()+")");
                         toReturn.add(ret);
                     }
                     else{
                         CqnUpdate update = Update.entity("AdminService.MappingTable").data(property);
 
-                        db.run(update); 
+                        db.run(update);
                         MassUploadRet ret = MassUploadRet.create();
                         ret.setMapID(property.getMapID().toString());
                         ret.setRefx(property.getRefx().toString());
                         ret.setStatus(200);
                         toReturn.add(ret);
 
-                    }   
+                    }
                 }
                 else{
 
@@ -178,7 +196,7 @@ public class AdminService implements EventHandler{
 
     @On (event = ExportToTableContext.CDS_NAME)
     public void ExportToTable(ExportToTableContext context){
-        CqnSelect sel = Select.from(MappingTable_.class);
+        CqnSelect sel = Select.from(MappingTable_.class).where(p -> p.Project_ID().eq((context.getProjectId())) .and( p.Phase_ID().eq((context.getPhaseId())))); 
         List<MappingTable> mappings=db.run(sel).listOf(MappingTable.class);
         for(MappingTable map : mappings){
             Properties property = Properties.create();
@@ -187,13 +205,80 @@ public class AdminService implements EventHandler{
             property.setPhaseId(map.getPhaseId());
             CqnInsert insert = Insert.into("AdminService.Properties").entry(property);
             db.run(insert);
-            CqnDelete delete = Delete.from(MappingTable_.class)
-            .where(b -> b.MapID().eq(property.getMapID()));
-            db.run(delete);
+            //CqnDelete delete = Delete.from(MappingTable_.class)
+           // .where(b -> b.MapID().eq(property.getMapID()));
+            //db.run(delete);
         }
         
         CqnSelect sel2 = Select.from(Properties_.class);
         context.setResult(db.run(sel2).listOf(Properties.class));
+
+
+    }
+
+
+    
+    
+    public void testStomp (Phases phase){
+
+       // HelloMessage m = new HelloMessage(context.toString());
+
+       // return new ReturnedGreeting(HtmlUtils.htmlEscape(m.getMessage()));
+       
+       CqnInsert insert = Insert.into("AdminService.Phases").entry(phase);
+       db.run(insert);
+        
+        
+    }
+
+    @SendTo("/topic/greetings")
+    @On(event = TestConnectionContext.CDS_NAME)
+    public void TestConnection (TestConnectionContext context){
+       // for(Projects project : context.getProjects()){
+        CqnInsert insert = Insert.into("AdminService.Phases").entry(context.getPhase());
+        db.run(insert);
+        context.setResult("{Project ID: " +context.getPhase().getProjectId() + ", \"PhaseID\": " + context.getPhase().getId() +"}" );
+        System.out.println("Should post1");
+
+       // publishToWebSocket("{\"ProjectID\": " +context.getPhase().getProjectId() + ", \"PhaseID\": " + context.getPhase().getId() +"}" );
+        System.out.println("Should post");
+    }
+
+
+
+    public void publishToWebSocket(String message ,String project , String phase) {
+        System.out.println("Here");
+        messagingTemplate.convertAndSend("/topic/App",  new ReturnedGreeting(message));
+        messagingTemplate.convertAndSend("/topic/Project/"+project,  new ReturnedGreeting(message));
+        messagingTemplate.convertAndSend("/topic/Phase/"+phase,  new ReturnedGreeting(message));
+        String greeting = "greetings";
+        messagingTemplate.convertAndSend("/topic/"+greeting,  new ReturnedGreeting(message));
+
+
+
+
+        System.out.println("DONEE");
+
+    }
+
+    
+
+    @Autowired
+    public AdminService(SimpMessagingTemplate messagingTemplate) {
+        this.messagingTemplate = messagingTemplate;
+    }
+
+    @On(event= CqnService.EVENT_UPDATE, entity = "AdminService.Properties")
+    public void onUpdate (CdsUpdateEventContext context) {
+        System.out.println(context.getCqn().entries().get(0).toString());
+        //System.out.println("Project: "+context.getCqn().entries().get(0).get("Project_ID").toString() +", Phase: "+context.getCqn().entries().get(0).get("Phase_ID").toString());
+
+        CqnSelect select = Select.from("AdminService.Phases").byId(Integer.parseInt(context.getCqn().entries().get(0).get("Phase_ID").toString()));
+
+        //Phase phase = db.run(select).
+
+        Phases phase = db.run(select).listOf(Phases.class).get(0);
+        publishToWebSocket((context.getCqn().entries().get(0).toString()),phase.getProjectId().toString(),context.getCqn().entries().get(0).get("Phase_ID").toString());
 
 
     }

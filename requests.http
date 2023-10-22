@@ -9,30 +9,31 @@ Authorization: Basic authenticated:
 
 ### Create Phases
 
-Post  http://localhost:8080/odata/v4/AdminService/MassUploadMapping
+Post  http://localhost:8080/odata/v4/AdminService/Populate
 Content-Type: application/json
 Authorization: Basic authenticated:
 
 
-{"Properties":
-    [
 
-        {"REFX":"REFX1",  "MapID":"1","Project_ID":1,"Phase_ID":1},
-        {"REFX":"REFX2",  "MapID":"2","Project_ID":1,"Phase_ID":1},
-        {"REFX":"REFX3",  "MapID":"3","Project_ID":1,"Phase_ID":1},
-        {"REFX":"REFX4",  "MapID":"4","Project_ID":1,"Phase_ID":1}
-         
 
-    ]
+        
+       
 
-}
 
 
 ### Export to Table
 
-Post  http://localhost:8080/odata/v4/AdminService/ExportToTable
+Post  http://localhost:8080/odata/v4/UserService/SellProperty
 Content-Type: application/json
 Authorization: Basic authenticated:
+
+
+{"Property":{
+    "MapID":"2",
+    "REFX":"REFX2",
+    "Status":"sold"
+}
+}
 
 
 

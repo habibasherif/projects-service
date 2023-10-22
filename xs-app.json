@@ -1,55 +1,27 @@
 {
-
-    "routes": [
   
-      {
-  
-        "source": "^/api/(.*)$",
-  
-        "target": "$1",
-  
-        "destination": "my-destination"
-  
-      },
-  
-      {
-  
-        "source": "(.*)",
-  
-        "target": "$1",
-  
-        "destination": "webapp-destination"
-  
-      }
-  
-    ],
-  
-    "destinations": [
-  
-      {
-  
-        "name": "my-destination",
-  
-        "url": "https://projects-service-triumphant-baboon-hl.cfapps.us10-001.hana.ondemand.com",
-  
-        "authenticationType": "NoAuthentication",
-  
-        "proxyType": "Internet"
-  
-      },
-  
-      {
-  
-        "name": "webapp-destination",
-  
-        "url": "https://edraky-plan-map-demo.web.app",
-  
-        "authenticationType": "NoAuthentication",
-  
-        "proxyType": "Internet"
-  
-      }
-  
-    ]
-  
-  }
+  "authenticationMethod": "none",
+  "websockets": {
+    "enabled": true,
+    "authenticationMethod":"none"
+  },
+  "logout": {
+    "logoutEndpoint": "/do/logout"
+  },
+  "routes": [
+    {
+      "source": "^/NodeWS(.*)$",
+      "target": "$1",
+      "authenticationType": "none",
+      "destination": "NodeWs_api",
+      "csrfProtection": false
+    },
+    {
+      "source": "^/odataSrv/(.*)$",
+      "target": "/catalog/$1",
+      "authenticationType": "none",
+      "destination": "srv_api",
+      "csrfProtection": false
+    }
+  ]
+}
