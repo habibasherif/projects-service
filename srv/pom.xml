@@ -8,7 +8,7 @@
 	</parent>
 
 	<artifactId>projects-service</artifactId>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>projects-service</name>
 
