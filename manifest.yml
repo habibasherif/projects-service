@@ -1,6 +1,6 @@
 ---
 applications:
-- name: projects-service
+- name: MasterPlan
   path: srv/target/projects-service-exec.jar
   random-route: true
   buildpacks:
@@ -10,4 +10,4 @@ applications:
     JBP_CONFIG_SPRING_AUTO_RECONFIGURATION: '{enabled: false}'
     SPRING_PROFILES_ACTIVE: cloud
   services:
-  - projects-hana
+  - MasterPlan-hana

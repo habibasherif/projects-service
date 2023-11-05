@@ -16,16 +16,21 @@ entity Properties : managed {
     Dimensions : Double;
     Block : String (111);
     Number : String (111);
+    Content: LargeBinary @Core.MediaType:'image/svg+xml' ;
    
 }
-
+entity PhaseGallery {
+    image:LargeBinary @Core.MediaType:'image/svg+xml' @Core.ContentDisposition.Type: 'inline';
+    phaseID: Composition of one Phases;
+    key ID: Integer;
+}
 
 @Capabilities.Updatable :true
 @Capabilities.Deletable :true
 entity Phases {
     key ID   : Integer;
     project   : Association to Projects not null;
-    content : String (111);
+    content : Composition of many PhaseGallery on content.phaseID=$self;
     name : String (111);
     properties: Composition of many Properties on properties.Phase=$self;
 }
@@ -34,9 +39,11 @@ entity Phases {
 entity Projects {
     Key ID : Integer;
     phases : Composition of many Phases on phases.project=$self;
-    content : String(111);
+    content : LargeBinary @Core.MediaType:'image/svg+xml';
     name : String (111);
-    image: String (111);
+    image: LargeBinary @Core.MediaType:imageType @Core.ContentDisposition.Type: 'inline';
+    imageType : String(111) @Core.IsMediaType;
+    
 
 }
 

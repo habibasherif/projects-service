@@ -8,6 +8,7 @@ stompClient.onConnect = (frame) => {
     setConnected(true);
     console.log('Connected: ' + frame);
     stompClient.subscribe('/topic/greetings', (greeting) => {
+        console.log('Greeting: '+greeting.body)
         showGreeting(JSON.parse(greeting.body).content);
     });
 };
@@ -77,6 +78,7 @@ function sendName() {
 
 function showGreeting(message) {
     console.log('Inside greeting')
+    console.log('Message: '+message)
     $("#greetings").append("<tr><td>" + message + "</td></tr>");
 }
 

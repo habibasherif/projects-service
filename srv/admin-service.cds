@@ -14,11 +14,13 @@ service AdminService {
     entity Phases as projection on db.Phases;
     entity Projects as projection on db.Projects;
     entity MappingTable as projection on db.ERPTable;
+    entity PhaseGallery as projection on db.PhaseGallery;
     action MassUploadProjects (Projects : array of Projects) returns array of Projects;
     action MassUploadMapping (Properties :array of MappingTable) returns array of MassUploadRet;
     action ExportToTable (Phase_ID: Integer , Project_ID: Integer) returns array of Properties;
     action TestConnection (phase : Phases) returns String;
     action Populate();
+    action deleteContent() returns String;
     
     
 }
