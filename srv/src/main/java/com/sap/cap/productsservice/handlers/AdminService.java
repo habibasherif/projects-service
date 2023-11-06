@@ -38,6 +38,7 @@ import cds.gen.adminservice.Properties;
 import cds.gen.adminservice.Properties_;
 import cds.gen.adminservice.TestConnectionContext;
 import cds.gen.adminservice.PopulateContext;
+import cds.gen.adminservice.DeleteContentContext;
 
 @Component
 @ServiceName(AdminService_.CDS_NAME)
@@ -280,6 +281,26 @@ public class AdminService implements EventHandler{
         Phases phase = db.run(select).listOf(Phases.class).get(0);
         publishToWebSocket((context.getCqn().entries().get(0).toString()),phase.getProjectId().toString(),context.getCqn().entries().get(0).get("Phase_ID").toString());
 
+
+    }
+
+    @On(event = DeleteContentContext.CDS_NAME)
+    public void deleteContent(DeleteContentContext context){
+
+        CqnSelect select = Select.from("AdminService.Phases");
+
+        //Phase phase = db.run(select).
+
+       for(Phases phase : db.run(select).listOf(Phases.class)) {
+        
+        //phase.setContent(null);
+        phase.remove("content");
+        CqnUpdate update = Update.entity("AdminService.Phases").entry(phase);
+        db.run(update);
+
+
+       }
+       context.setResult("Done");
 
     }
 

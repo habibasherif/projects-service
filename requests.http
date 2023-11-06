@@ -9,11 +9,11 @@ Authorization: Basic authenticated:
 
 ### Create Phases
 
-Post  http://localhost:8080/odata/v4/AdminService/Populate
+PUT  http://localhost:8080/odata/v4/AdminService/Phases(1)
 Content-Type: application/json
 Authorization: Basic authenticated:
 
-
+{"ID":1,"name":"Phase2","project_ID":1}
 
 
         
@@ -104,13 +104,37 @@ Authorization: Basic authenticated:
 
     }
 
+### Create Erp Table Mass Upload
 
+POST  http://localhost:8080/odata/v4/AdminService/Projects
+Content-Type: application/json
+Authorization: Basic authenticated:
+
+{"name":"Project 1","ID":1,"phases":[{"ID":1},{"ID":2},{"ID":3}]}
 
  
+### Create Erp Table Mass Upload
+
+Put  http://localhost:8080/odata/v4/AdminService/Phases(1)
+Content-Type: application/json
+Authorization: Basic authenticated:
+
+{"content":[{"ID":1}]}
 
  
-    
-    
-        
+### Create Erp Table Mass Upload
+
+Post  http://localhost:8080/odata/v4/AdminService/PhaseGallery
+Content-Type: application/json
+Authorization: Basic authenticated:
+
+{"ID":1,"phase_ID":1}
+
+### Create Erp Table Mass Upload
+
+Delete  http://localhost:8080/odata/v4/AdminService/PhaseGallery(1)
+Content-Type: application/json
+Authorization: Basic authenticated:
+
 
 
