@@ -1,6 +1,4 @@
 
-DROP VIEW IF EXISTS localized_fr_UserService_PhaseGallery;
-DROP VIEW IF EXISTS localized_de_UserService_PhaseGallery;
 DROP VIEW IF EXISTS localized_fr_UserService_Projects;
 DROP VIEW IF EXISTS localized_de_UserService_Projects;
 DROP VIEW IF EXISTS localized_fr_AdminService_PhaseGallery;
@@ -27,7 +25,6 @@ DROP VIEW IF EXISTS localized_fr_sap_capire_properties_Phases;
 DROP VIEW IF EXISTS localized_de_sap_capire_properties_Phases;
 DROP VIEW IF EXISTS localized_fr_sap_capire_properties_Properties;
 DROP VIEW IF EXISTS localized_de_sap_capire_properties_Properties;
-DROP VIEW IF EXISTS localized_UserService_PhaseGallery;
 DROP VIEW IF EXISTS localized_UserService_Projects;
 DROP VIEW IF EXISTS localized_AdminService_PhaseGallery;
 DROP VIEW IF EXISTS localized_AdminService_MappingTable;
@@ -41,7 +38,6 @@ DROP VIEW IF EXISTS localized_sap_capire_properties_Projects;
 DROP VIEW IF EXISTS localized_sap_capire_properties_PhaseGallery;
 DROP VIEW IF EXISTS localized_sap_capire_properties_Phases;
 DROP VIEW IF EXISTS localized_sap_capire_properties_Properties;
-DROP VIEW IF EXISTS UserService_PhaseGallery;
 DROP VIEW IF EXISTS UserService_Properties_texts;
 DROP VIEW IF EXISTS PropertyService_Property_texts;
 DROP VIEW IF EXISTS AdminService_Properties_texts;
@@ -81,7 +77,8 @@ CREATE TABLE sap_capire_properties_Properties (
 
 CREATE TABLE sap_capire_properties_PhaseGallery (
   image BINARY LARGE OBJECT,
-  phaseID_ID INTEGER,
+  imageType NVARCHAR(111),
+  phase_ID INTEGER,
   ID INTEGER NOT NULL,
   PRIMARY KEY(ID)
 ); 
@@ -90,6 +87,7 @@ CREATE TABLE sap_capire_properties_Phases (
   ID INTEGER NOT NULL,
   project_ID INTEGER NOT NULL,
   name NVARCHAR(111),
+  content BINARY LARGE OBJECT,
   PRIMARY KEY(ID)
 ); 
 
@@ -137,7 +135,8 @@ FROM sap_capire_properties_Properties AS Properties_0;
 CREATE VIEW AdminService_Phases AS SELECT
   Phases_0.ID,
   Phases_0.project_ID,
-  Phases_0.name
+  Phases_0.name,
+  Phases_0.content
 FROM sap_capire_properties_Phases AS Phases_0; 
 
 CREATE VIEW AdminService_Projects AS SELECT
@@ -157,7 +156,8 @@ FROM sap_capire_properties_ERPTable AS ERPTable_0;
 
 CREATE VIEW AdminService_PhaseGallery AS SELECT
   PhaseGallery_0.image,
-  PhaseGallery_0.phaseID_ID,
+  PhaseGallery_0.imageType,
+  PhaseGallery_0.phase_ID,
   PhaseGallery_0.ID
 FROM sap_capire_properties_PhaseGallery AS PhaseGallery_0; 
 
@@ -197,7 +197,8 @@ FROM sap_capire_properties_Projects AS Projects_0;
 CREATE VIEW UserService_Phases AS SELECT
   Phases_0.ID,
   Phases_0.project_ID,
-  Phases_0.name
+  Phases_0.name,
+  Phases_0.content
 FROM sap_capire_properties_Phases AS Phases_0; 
 
 CREATE VIEW AdminService_Properties_texts AS SELECT
@@ -218,12 +219,6 @@ CREATE VIEW UserService_Properties_texts AS SELECT
   texts_0.Path
 FROM sap_capire_properties_Properties_texts AS texts_0; 
 
-CREATE VIEW UserService_PhaseGallery AS SELECT
-  PhaseGallery_0.image,
-  PhaseGallery_0.phaseID_ID,
-  PhaseGallery_0.ID
-FROM sap_capire_properties_PhaseGallery AS PhaseGallery_0; 
-
 CREATE VIEW localized_sap_capire_properties_Properties AS SELECT
   L_0.createdAt,
   L_0.createdBy,
@@ -243,12 +238,14 @@ FROM (sap_capire_properties_Properties AS L_0 LEFT JOIN sap_capire_properties_Pr
 CREATE VIEW localized_sap_capire_properties_Phases AS SELECT
   L.ID,
   L.project_ID,
-  L.name
+  L.name,
+  L.content
 FROM sap_capire_properties_Phases AS L; 
 
 CREATE VIEW localized_sap_capire_properties_PhaseGallery AS SELECT
   L.image,
-  L.phaseID_ID,
+  L.imageType,
+  L.phase_ID,
   L.ID
 FROM sap_capire_properties_PhaseGallery AS L; 
 
@@ -302,13 +299,15 @@ FROM localized_sap_capire_properties_Properties AS Properties_0;
 CREATE VIEW localized_AdminService_Phases AS SELECT
   Phases_0.ID,
   Phases_0.project_ID,
-  Phases_0.name
+  Phases_0.name,
+  Phases_0.content
 FROM localized_sap_capire_properties_Phases AS Phases_0; 
 
 CREATE VIEW localized_UserService_Phases AS SELECT
   Phases_0.ID,
   Phases_0.project_ID,
-  Phases_0.name
+  Phases_0.name,
+  Phases_0.content
 FROM localized_sap_capire_properties_Phases AS Phases_0; 
 
 CREATE VIEW localized_AdminService_Projects AS SELECT
@@ -328,7 +327,8 @@ FROM localized_sap_capire_properties_ERPTable AS ERPTable_0;
 
 CREATE VIEW localized_AdminService_PhaseGallery AS SELECT
   PhaseGallery_0.image,
-  PhaseGallery_0.phaseID_ID,
+  PhaseGallery_0.imageType,
+  PhaseGallery_0.phase_ID,
   PhaseGallery_0.ID
 FROM localized_sap_capire_properties_PhaseGallery AS PhaseGallery_0; 
 
@@ -339,12 +339,6 @@ CREATE VIEW localized_UserService_Projects AS SELECT
   Projects_0.image,
   Projects_0.imageType
 FROM localized_sap_capire_properties_Projects AS Projects_0; 
-
-CREATE VIEW localized_UserService_PhaseGallery AS SELECT
-  PhaseGallery_0.image,
-  PhaseGallery_0.phaseID_ID,
-  PhaseGallery_0.ID
-FROM localized_sap_capire_properties_PhaseGallery AS PhaseGallery_0; 
 
 CREATE VIEW localized_de_sap_capire_properties_Properties AS SELECT
   L_0.createdAt,
@@ -381,24 +375,28 @@ FROM (sap_capire_properties_Properties AS L_0 LEFT JOIN sap_capire_properties_Pr
 CREATE VIEW localized_de_sap_capire_properties_Phases AS SELECT
   L.ID,
   L.project_ID,
-  L.name
+  L.name,
+  L.content
 FROM sap_capire_properties_Phases AS L; 
 
 CREATE VIEW localized_fr_sap_capire_properties_Phases AS SELECT
   L.ID,
   L.project_ID,
-  L.name
+  L.name,
+  L.content
 FROM sap_capire_properties_Phases AS L; 
 
 CREATE VIEW localized_de_sap_capire_properties_PhaseGallery AS SELECT
   L.image,
-  L.phaseID_ID,
+  L.imageType,
+  L.phase_ID,
   L.ID
 FROM sap_capire_properties_PhaseGallery AS L; 
 
 CREATE VIEW localized_fr_sap_capire_properties_PhaseGallery AS SELECT
   L.image,
-  L.phaseID_ID,
+  L.imageType,
+  L.phase_ID,
   L.ID
 FROM sap_capire_properties_PhaseGallery AS L; 
 
@@ -499,25 +497,29 @@ FROM localized_fr_sap_capire_properties_Properties AS Properties_0;
 CREATE VIEW localized_de_AdminService_Phases AS SELECT
   Phases_0.ID,
   Phases_0.project_ID,
-  Phases_0.name
+  Phases_0.name,
+  Phases_0.content
 FROM localized_de_sap_capire_properties_Phases AS Phases_0; 
 
 CREATE VIEW localized_fr_AdminService_Phases AS SELECT
   Phases_0.ID,
   Phases_0.project_ID,
-  Phases_0.name
+  Phases_0.name,
+  Phases_0.content
 FROM localized_fr_sap_capire_properties_Phases AS Phases_0; 
 
 CREATE VIEW localized_de_UserService_Phases AS SELECT
   Phases_0.ID,
   Phases_0.project_ID,
-  Phases_0.name
+  Phases_0.name,
+  Phases_0.content
 FROM localized_de_sap_capire_properties_Phases AS Phases_0; 
 
 CREATE VIEW localized_fr_UserService_Phases AS SELECT
   Phases_0.ID,
   Phases_0.project_ID,
-  Phases_0.name
+  Phases_0.name,
+  Phases_0.content
 FROM localized_fr_sap_capire_properties_Phases AS Phases_0; 
 
 CREATE VIEW localized_de_AdminService_Projects AS SELECT
@@ -552,13 +554,15 @@ FROM localized_fr_sap_capire_properties_ERPTable AS ERPTable_0;
 
 CREATE VIEW localized_de_AdminService_PhaseGallery AS SELECT
   PhaseGallery_0.image,
-  PhaseGallery_0.phaseID_ID,
+  PhaseGallery_0.imageType,
+  PhaseGallery_0.phase_ID,
   PhaseGallery_0.ID
 FROM localized_de_sap_capire_properties_PhaseGallery AS PhaseGallery_0; 
 
 CREATE VIEW localized_fr_AdminService_PhaseGallery AS SELECT
   PhaseGallery_0.image,
-  PhaseGallery_0.phaseID_ID,
+  PhaseGallery_0.imageType,
+  PhaseGallery_0.phase_ID,
   PhaseGallery_0.ID
 FROM localized_fr_sap_capire_properties_PhaseGallery AS PhaseGallery_0; 
 
@@ -577,16 +581,4 @@ CREATE VIEW localized_fr_UserService_Projects AS SELECT
   Projects_0.image,
   Projects_0.imageType
 FROM localized_fr_sap_capire_properties_Projects AS Projects_0; 
-
-CREATE VIEW localized_de_UserService_PhaseGallery AS SELECT
-  PhaseGallery_0.image,
-  PhaseGallery_0.phaseID_ID,
-  PhaseGallery_0.ID
-FROM localized_de_sap_capire_properties_PhaseGallery AS PhaseGallery_0; 
-
-CREATE VIEW localized_fr_UserService_PhaseGallery AS SELECT
-  PhaseGallery_0.image,
-  PhaseGallery_0.phaseID_ID,
-  PhaseGallery_0.ID
-FROM localized_fr_sap_capire_properties_PhaseGallery AS PhaseGallery_0; 
 

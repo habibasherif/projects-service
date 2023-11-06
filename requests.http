@@ -119,15 +119,16 @@ Put  http://localhost:8080/odata/v4/AdminService/Phases(1)
 Content-Type: application/json
 Authorization: Basic authenticated:
 
-{"content_ID":1}
+{"content":[{"ID":1}]}
 
  
 ### Create Erp Table Mass Upload
 
-Delete  http://localhost:8080/odata/v4/AdminService/Phases(2)/content(2)
+Post  http://localhost:8080/odata/v4/AdminService/PhaseGallery
 Content-Type: application/json
 Authorization: Basic authenticated:
 
+{"ID":1,"phase_ID":1}
 
 ### Create Erp Table Mass Upload
 

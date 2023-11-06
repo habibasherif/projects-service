@@ -20,8 +20,9 @@ entity Properties : managed {
    
 }
 entity PhaseGallery {
-    image:LargeBinary @Core.MediaType:'image/svg+xml' @Core.ContentDisposition.Type: 'inline';
-    phaseID: Composition of one Phases;
+    image:LargeBinary @Core.MediaType:imageType @Core.ContentDisposition.Type: 'inline';
+    imageType: String(111) @Core.IsMediaType;
+    phase: Association to Phases;
     key ID: Integer;
 }
 
@@ -30,9 +31,10 @@ entity PhaseGallery {
 entity Phases {
     key ID   : Integer;
     project   : Association to Projects not null;
-    content : Composition of many PhaseGallery on content.phaseID=$self;
+    gallery : Association to  many PhaseGallery on gallery.phase=$self;
     name : String (111);
     properties: Composition of many Properties on properties.Phase=$self;
+    content: LargeBinary @Core.MediaType:'image/svg+xml' @Core.ContentDisposition.Type: 'inline';  
 }
 
 @Capabilities.Deletable :true
