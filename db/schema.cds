@@ -11,7 +11,7 @@ entity Properties : managed {
     REFX   :  String (111);
     Key MapID: String (111);
     Path    : localized String(1111);
-    Status : String (111) default 'availale';
+    Status : String (111) default 'available';
     Phase    : Association to Phases;
     Dimensions : Double;
     Block : String (111);
