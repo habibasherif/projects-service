@@ -29,7 +29,7 @@ entity PhaseGallery {
 @Capabilities.Updatable :true
 @Capabilities.Deletable :true
 entity Phases {
-    key ID   : Integer;
+    key ID   : Integer ;
     project   : Association to Projects not null;
     gallery : Association to  many PhaseGallery on gallery.phase=$self;
     name : String (111);

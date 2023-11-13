@@ -34,11 +34,10 @@ import cds.gen.adminservice.MappingTable_;
 import cds.gen.adminservice.MassUploadMappingContext;
 import cds.gen.adminservice.MassUploadProjectsContext;
 import cds.gen.adminservice.Phases;
+import cds.gen.adminservice.PopulateContext;
 import cds.gen.adminservice.Properties;
 import cds.gen.adminservice.Properties_;
 import cds.gen.adminservice.TestConnectionContext;
-import cds.gen.adminservice.PopulateContext;
-import cds.gen.adminservice.DeleteContentContext;
 
 @Component
 @ServiceName(AdminService_.CDS_NAME)
@@ -49,12 +48,13 @@ public class AdminService implements EventHandler{
     @Autowired
     Messages messages;
 
+    private int ProjectcurrentID=100;
+    private int PhasecurrentID=100;
+
     private final SimpMessagingTemplate messagingTemplate;
 
     @On(event= CqnService.EVENT_CREATE, entity = "AdminService.Properties")
     public void onCreate (CdsCreateEventContext context) {
-
-        
 
         String REFX = context.getCqn().entries().get(0).get("REFX").toString();
     
@@ -285,23 +285,20 @@ public class AdminService implements EventHandler{
 
     }
 
-    @On(event = DeleteContentContext.CDS_NAME)
-    public void deleteContent(DeleteContentContext context){
-
-        CqnSelect select = Select.from("AdminService.Phases");
-
-        //Phase phase = db.run(select).
-
-       for(Phases phase : db.run(select).listOf(Phases.class)) {
+    
+    @On(event= CqnService.EVENT_CREATE, entity = "AdminService.Projects")
+    public void onCreateProject (CdsCreateEventContext context) {
         
-        //phase.setContent(null);
-        phase.remove("content");
-        CqnUpdate update = Update.entity("AdminService.Phases").entry(phase);
-        db.run(update);
+        context.getCqn().entries().forEach(p -> p.put("ID",ProjectcurrentID++));
+        
+        context.setResult(context.getCqn().entries());
 
-
-       }
-       context.setResult("Done");
+    }
+    @On(event= CqnService.EVENT_CREATE, entity = "AdminService.Phases")
+    public void onCreatePhases (CdsCreateEventContext context) {
+        
+        context.getCqn().entries().forEach(p -> p.put("ID",PhasecurrentID++));
+        context.setResult(context.getCqn().entries());
 
     }
 
