@@ -290,7 +290,8 @@ public class AdminService implements EventHandler{
     public void onCreateProject (CdsCreateEventContext context) {
         
         context.getCqn().entries().forEach(p -> p.put("ID",ProjectcurrentID++));
-        
+        CqnInsert insert = Insert.into("AdminService.Projects").entries(context.getCqn().entries());
+        db.run(insert);
         context.setResult(context.getCqn().entries());
 
     }
@@ -298,6 +299,8 @@ public class AdminService implements EventHandler{
     public void onCreatePhases (CdsCreateEventContext context) {
         
         context.getCqn().entries().forEach(p -> p.put("ID",PhasecurrentID++));
+        CqnInsert insert = Insert.into("AdminService.Phases").entries(context.getCqn().entries());
+        db.run(insert);
         context.setResult(context.getCqn().entries());
 
     }
