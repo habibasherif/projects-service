@@ -17,6 +17,9 @@ entity Properties : managed {
     Block : String (111);
     Number : String (111);
     Content: LargeBinary @Core.MediaType:'image/svg+xml' ;
+    Name : String (111);
+    NameArabic : String (111);
+    PathArabic :String(111);
    
 }
 entity PhaseGallery {
@@ -25,6 +28,14 @@ entity PhaseGallery {
     phase: Association to Phases;
     key ID: Integer;
 }
+
+entity ProjectGallery{
+    image: LargeBinary @Core.MediaType:imageType @Core.ContentDisposition.Type:'inline';
+    imageType: String(111) @Core.IsMediaType;
+    project: Association to Projects;
+    key ID :Integer;
+}
+
 
 @Capabilities.Updatable :true
 @Capabilities.Deletable :true
