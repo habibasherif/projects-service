@@ -15,6 +15,8 @@ DROP VIEW IF EXISTS localized_fr_UserService_Properties;
 DROP VIEW IF EXISTS localized_de_UserService_Properties;
 DROP VIEW IF EXISTS localized_fr_AdminService_Properties;
 DROP VIEW IF EXISTS localized_de_AdminService_Properties;
+DROP VIEW IF EXISTS localized_fr_sap_capire_properties_ProjectGallery;
+DROP VIEW IF EXISTS localized_de_sap_capire_properties_ProjectGallery;
 DROP VIEW IF EXISTS localized_fr_sap_capire_properties_ERPTable;
 DROP VIEW IF EXISTS localized_de_sap_capire_properties_ERPTable;
 DROP VIEW IF EXISTS localized_fr_sap_capire_properties_Projects;
@@ -33,6 +35,7 @@ DROP VIEW IF EXISTS localized_UserService_Phases;
 DROP VIEW IF EXISTS localized_AdminService_Phases;
 DROP VIEW IF EXISTS localized_UserService_Properties;
 DROP VIEW IF EXISTS localized_AdminService_Properties;
+DROP VIEW IF EXISTS localized_sap_capire_properties_ProjectGallery;
 DROP VIEW IF EXISTS localized_sap_capire_properties_ERPTable;
 DROP VIEW IF EXISTS localized_sap_capire_properties_Projects;
 DROP VIEW IF EXISTS localized_sap_capire_properties_PhaseGallery;
@@ -54,6 +57,7 @@ DROP TABLE IF EXISTS sap_capire_properties_Properties_texts;
 DROP TABLE IF EXISTS sap_capire_properties_ERPTable;
 DROP TABLE IF EXISTS sap_capire_properties_Projects;
 DROP TABLE IF EXISTS sap_capire_properties_Phases;
+DROP TABLE IF EXISTS sap_capire_properties_ProjectGallery;
 DROP TABLE IF EXISTS sap_capire_properties_PhaseGallery;
 DROP TABLE IF EXISTS sap_capire_properties_Properties;
 
@@ -71,6 +75,9 @@ CREATE TABLE sap_capire_properties_Properties (
   Block NVARCHAR(111),
   Number NVARCHAR(111),
   Content BINARY LARGE OBJECT,
+  Name NVARCHAR(111),
+  NameArabic NVARCHAR(111),
+  PathArabic NVARCHAR(111),
   PRIMARY KEY(MapID),
   CONSTRAINT sap_capire_properties_Properties_REFX UNIQUE (REFX)
 ); 
@@ -79,6 +86,14 @@ CREATE TABLE sap_capire_properties_PhaseGallery (
   image BINARY LARGE OBJECT,
   imageType NVARCHAR(111),
   phase_ID INTEGER,
+  ID INTEGER NOT NULL,
+  PRIMARY KEY(ID)
+); 
+
+CREATE TABLE sap_capire_properties_ProjectGallery (
+  image BINARY LARGE OBJECT,
+  imageType NVARCHAR(111),
+  project_ID INTEGER,
   ID INTEGER NOT NULL,
   PRIMARY KEY(ID)
 ); 
@@ -129,7 +144,10 @@ CREATE VIEW AdminService_Properties AS SELECT
   Properties_0.Dimensions,
   Properties_0.Block,
   Properties_0.Number,
-  Properties_0.Content
+  Properties_0.Content,
+  Properties_0.Name,
+  Properties_0.NameArabic,
+  Properties_0.PathArabic
 FROM sap_capire_properties_Properties AS Properties_0; 
 
 CREATE VIEW AdminService_Phases AS SELECT
@@ -167,7 +185,10 @@ CREATE VIEW PropertyService_Property AS SELECT
   Properties_0.Dimensions,
   Properties_0.Block,
   Properties_0.Number,
-  Properties_0.Content
+  Properties_0.Content,
+  Properties_0.Name,
+  Properties_0.NameArabic,
+  Properties_0.PathArabic
 FROM sap_capire_properties_Properties AS Properties_0; 
 
 CREATE VIEW UserService_Properties AS SELECT
@@ -183,7 +204,10 @@ CREATE VIEW UserService_Properties AS SELECT
   Properties_0.Dimensions,
   Properties_0.Block,
   Properties_0.Number,
-  Properties_0.Content
+  Properties_0.Content,
+  Properties_0.Name,
+  Properties_0.NameArabic,
+  Properties_0.PathArabic
 FROM sap_capire_properties_Properties AS Properties_0; 
 
 CREATE VIEW UserService_Projects AS SELECT
@@ -232,7 +256,10 @@ CREATE VIEW localized_sap_capire_properties_Properties AS SELECT
   L_0.Dimensions,
   L_0.Block,
   L_0.Number,
-  L_0.Content
+  L_0.Content,
+  L_0.Name,
+  L_0.NameArabic,
+  L_0.PathArabic
 FROM (sap_capire_properties_Properties AS L_0 LEFT JOIN sap_capire_properties_Properties_texts AS localized_1 ON localized_1.MapID = L_0.MapID AND localized_1.locale = @locale); 
 
 CREATE VIEW localized_sap_capire_properties_Phases AS SELECT
@@ -264,6 +291,13 @@ CREATE VIEW localized_sap_capire_properties_ERPTable AS SELECT
   L.Phase_ID
 FROM sap_capire_properties_ERPTable AS L; 
 
+CREATE VIEW localized_sap_capire_properties_ProjectGallery AS SELECT
+  L.image,
+  L.imageType,
+  L.project_ID,
+  L.ID
+FROM sap_capire_properties_ProjectGallery AS L; 
+
 CREATE VIEW localized_AdminService_Properties AS SELECT
   Properties_0.createdAt,
   Properties_0.createdBy,
@@ -277,7 +311,10 @@ CREATE VIEW localized_AdminService_Properties AS SELECT
   Properties_0.Dimensions,
   Properties_0.Block,
   Properties_0.Number,
-  Properties_0.Content
+  Properties_0.Content,
+  Properties_0.Name,
+  Properties_0.NameArabic,
+  Properties_0.PathArabic
 FROM localized_sap_capire_properties_Properties AS Properties_0; 
 
 CREATE VIEW localized_UserService_Properties AS SELECT
@@ -293,7 +330,10 @@ CREATE VIEW localized_UserService_Properties AS SELECT
   Properties_0.Dimensions,
   Properties_0.Block,
   Properties_0.Number,
-  Properties_0.Content
+  Properties_0.Content,
+  Properties_0.Name,
+  Properties_0.NameArabic,
+  Properties_0.PathArabic
 FROM localized_sap_capire_properties_Properties AS Properties_0; 
 
 CREATE VIEW localized_AdminService_Phases AS SELECT
@@ -353,7 +393,10 @@ CREATE VIEW localized_de_sap_capire_properties_Properties AS SELECT
   L_0.Dimensions,
   L_0.Block,
   L_0.Number,
-  L_0.Content
+  L_0.Content,
+  L_0.Name,
+  L_0.NameArabic,
+  L_0.PathArabic
 FROM (sap_capire_properties_Properties AS L_0 LEFT JOIN sap_capire_properties_Properties_texts AS localized_de_1 ON localized_de_1.MapID = L_0.MapID AND localized_de_1.locale = @locale); 
 
 CREATE VIEW localized_fr_sap_capire_properties_Properties AS SELECT
@@ -369,7 +412,10 @@ CREATE VIEW localized_fr_sap_capire_properties_Properties AS SELECT
   L_0.Dimensions,
   L_0.Block,
   L_0.Number,
-  L_0.Content
+  L_0.Content,
+  L_0.Name,
+  L_0.NameArabic,
+  L_0.PathArabic
 FROM (sap_capire_properties_Properties AS L_0 LEFT JOIN sap_capire_properties_Properties_texts AS localized_fr_1 ON localized_fr_1.MapID = L_0.MapID AND localized_fr_1.locale = @locale); 
 
 CREATE VIEW localized_de_sap_capire_properties_Phases AS SELECT
@@ -430,6 +476,20 @@ CREATE VIEW localized_fr_sap_capire_properties_ERPTable AS SELECT
   L.Phase_ID
 FROM sap_capire_properties_ERPTable AS L; 
 
+CREATE VIEW localized_de_sap_capire_properties_ProjectGallery AS SELECT
+  L.image,
+  L.imageType,
+  L.project_ID,
+  L.ID
+FROM sap_capire_properties_ProjectGallery AS L; 
+
+CREATE VIEW localized_fr_sap_capire_properties_ProjectGallery AS SELECT
+  L.image,
+  L.imageType,
+  L.project_ID,
+  L.ID
+FROM sap_capire_properties_ProjectGallery AS L; 
+
 CREATE VIEW localized_de_AdminService_Properties AS SELECT
   Properties_0.createdAt,
   Properties_0.createdBy,
@@ -443,7 +503,10 @@ CREATE VIEW localized_de_AdminService_Properties AS SELECT
   Properties_0.Dimensions,
   Properties_0.Block,
   Properties_0.Number,
-  Properties_0.Content
+  Properties_0.Content,
+  Properties_0.Name,
+  Properties_0.NameArabic,
+  Properties_0.PathArabic
 FROM localized_de_sap_capire_properties_Properties AS Properties_0; 
 
 CREATE VIEW localized_fr_AdminService_Properties AS SELECT
@@ -459,7 +522,10 @@ CREATE VIEW localized_fr_AdminService_Properties AS SELECT
   Properties_0.Dimensions,
   Properties_0.Block,
   Properties_0.Number,
-  Properties_0.Content
+  Properties_0.Content,
+  Properties_0.Name,
+  Properties_0.NameArabic,
+  Properties_0.PathArabic
 FROM localized_fr_sap_capire_properties_Properties AS Properties_0; 
 
 CREATE VIEW localized_de_UserService_Properties AS SELECT
@@ -475,7 +541,10 @@ CREATE VIEW localized_de_UserService_Properties AS SELECT
   Properties_0.Dimensions,
   Properties_0.Block,
   Properties_0.Number,
-  Properties_0.Content
+  Properties_0.Content,
+  Properties_0.Name,
+  Properties_0.NameArabic,
+  Properties_0.PathArabic
 FROM localized_de_sap_capire_properties_Properties AS Properties_0; 
 
 CREATE VIEW localized_fr_UserService_Properties AS SELECT
@@ -491,7 +560,10 @@ CREATE VIEW localized_fr_UserService_Properties AS SELECT
   Properties_0.Dimensions,
   Properties_0.Block,
   Properties_0.Number,
-  Properties_0.Content
+  Properties_0.Content,
+  Properties_0.Name,
+  Properties_0.NameArabic,
+  Properties_0.PathArabic
 FROM localized_fr_sap_capire_properties_Properties AS Properties_0; 
 
 CREATE VIEW localized_de_AdminService_Phases AS SELECT
