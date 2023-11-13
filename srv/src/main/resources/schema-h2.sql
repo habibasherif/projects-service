@@ -65,7 +65,7 @@ CREATE TABLE sap_capire_properties_Properties (
   REFX NVARCHAR(111),
   MapID NVARCHAR(111) NOT NULL,
   Path NVARCHAR(1111),
-  Status NVARCHAR(111) DEFAULT 'availale',
+  Status NVARCHAR(111) DEFAULT 'available',
   Phase_ID INTEGER,
   Dimensions DOUBLE,
   Block NVARCHAR(111),

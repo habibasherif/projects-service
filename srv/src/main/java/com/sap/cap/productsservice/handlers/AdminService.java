@@ -204,6 +204,7 @@ public class AdminService implements EventHandler{
             property.setMapID(map.getMapID());
             property.setRefx(map.getRefx());
             property.setPhaseId(map.getPhaseId());
+            property.setStatus("available");
             CqnInsert insert = Insert.into("AdminService.Properties").entry(property);
             db.run(insert);
             //CqnDelete delete = Delete.from(MappingTable_.class)
