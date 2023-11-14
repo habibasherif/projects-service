@@ -44,6 +44,7 @@ entity Phases {
     project   : Association to Projects not null;
     gallery : Association to  many PhaseGallery on gallery.phase=$self;
     name : String (111);
+    nameArabic :String (111);
     properties: Composition of many Properties on properties.Phase=$self;
     content: LargeBinary @Core.MediaType:'image/svg+xml' @Core.ContentDisposition.Type: 'inline';  
 }
@@ -53,9 +54,13 @@ entity Projects {
     Key ID : Integer;
     phases : Composition of many Phases on phases.project=$self;
     content : LargeBinary @Core.MediaType:'image/svg+xml';
-    name : String (111);
+    name : localized String (111);
     image: LargeBinary @Core.MediaType:imageType @Core.ContentDisposition.Type: 'inline';
     imageType : String(111) @Core.IsMediaType;
+    nameArabic :String(111);
+    description : String(111);
+    descriptionArabic :String (111);
+    gallery : Association to many ProjectGallery on gallery.project=$self;
     
 
 }
