@@ -124,11 +124,11 @@ Authorization: Basic authenticated:
  
 ### Create Erp Table Mass Upload
 
-Post  http://localhost:8080/odata/v4/AdminService/PhaseGallery
+Post  http://localhost:8080/odata/v4/AdminService/ProjectGallery
 Content-Type: application/json
 Authorization: Basic authenticated:
 
-{"ID":1,"phase_ID":1}
+{"project_ID":1}
 
 ### Create Erp Table Mass Upload
 

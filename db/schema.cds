@@ -22,18 +22,18 @@ entity Properties : managed {
     PathArabic :String(111);
    
 }
-entity PhaseGallery {
+entity PhaseGallery :cuid{
     image:LargeBinary @Core.MediaType:imageType @Core.ContentDisposition.Type: 'inline';
     imageType: String(111) @Core.IsMediaType;
     phase: Association to Phases;
-    key ID: Integer;
+    
 }
 
-entity ProjectGallery{
+entity ProjectGallery:cuid{
     image: LargeBinary @Core.MediaType:imageType @Core.ContentDisposition.Type:'inline';
     imageType: String(111) @Core.IsMediaType;
     project: Association to Projects;
-    key ID :Integer;
+   
 }
 
 
@@ -58,8 +58,8 @@ entity Projects {
     image: LargeBinary @Core.MediaType:imageType @Core.ContentDisposition.Type: 'inline';
     imageType : String(111) @Core.IsMediaType;
     nameArabic :String(111);
-    description : String(111);
-    descriptionArabic :String (111);
+    description : String;
+    descriptionArabic :String;
     gallery : Association to many ProjectGallery on gallery.project=$self;
     
 

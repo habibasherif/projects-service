@@ -38,6 +38,8 @@ service UserService{
     @readonly entity Properties as projection on db.Properties;
     @readonly entity Projects as projection on db.Projects;
     @readonly entity Phases as projection on db.Phases;
+    @readonly entity ProjectGallery as projection on db.ProjectGallery;
+    @readonly entity PhaseGallery as projection on db.PhaseGallery;
     action SellProperty(Property : Properties , User : String) returns MassUploadRet;
 
     
