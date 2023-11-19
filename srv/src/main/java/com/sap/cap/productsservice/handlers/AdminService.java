@@ -236,14 +236,19 @@ public class AdminService implements EventHandler{
     @SendTo("/topic/greetings")
     @On(event = TestConnectionContext.CDS_NAME)
     public void TestConnection (TestConnectionContext context){
-       // for(Projects project : context.getProjects()){
-        CqnInsert insert = Insert.into("AdminService.Phases").entry(context.getPhase());
-        db.run(insert);
-        context.setResult("{Project ID: " +context.getPhase().getProjectId() + ", \"PhaseID\": " + context.getPhase().getId() +"}" );
-        System.out.println("Should post1");
+    //    // for(Projects project : context.getProjects()){
+    //     CqnInsert insert = Insert.into("AdminService.Phases").entry(context.getPhase());
+    //     db.run(insert);
+    //     context.setResult("{Project ID: " +context.getPhase().getProjectId() + ", \"PhaseID\": " + context.getPhase().getId() +"}" );
+    //     System.out.println("Should post1");
 
-       // publishToWebSocket("{\"ProjectID\": " +context.getPhase().getProjectId() + ", \"PhaseID\": " + context.getPhase().getId() +"}" );
-        System.out.println("Should post");
+    //    // publishToWebSocket("{\"ProjectID\": " +context.getPhase().getProjectId() + ", \"PhaseID\": " + context.getPhase().getId() +"}" );
+    //     System.out.println("Should post");
+       // CqnSelect select = Select.from("AdminService.ProjectGallery").where(p -> p.ID()==1);
+       CqnSelect select = Select.from("AdminService.ProjectGallery").byId(1);
+       //ProjectGallery p= db.run(select);
+       System.out.println(db.run(select));
+
     }
 
 
