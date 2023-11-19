@@ -9,10 +9,12 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 import com.sap.cap.productsservice.TestingStomp.ReturnedGreeting;
+import com.sap.cds.ql.Delete;
 import com.sap.cds.ql.Insert;
 import com.sap.cds.ql.Select;
 import com.sap.cds.ql.Update;
 import com.sap.cds.ql.Upsert;
+import com.sap.cds.ql.cqn.CqnDelete;
 import com.sap.cds.ql.cqn.CqnInsert;
 import com.sap.cds.ql.cqn.CqnSelect;
 import com.sap.cds.ql.cqn.CqnUpdate;
@@ -35,6 +37,8 @@ import cds.gen.adminservice.MassUploadMappingContext;
 import cds.gen.adminservice.MassUploadProjectsContext;
 import cds.gen.adminservice.Phases;
 import cds.gen.adminservice.PopulateContext;
+import cds.gen.adminservice.ProjectGallery;
+import cds.gen.adminservice.ProjectGallery_;
 import cds.gen.adminservice.Properties;
 import cds.gen.adminservice.Properties_;
 import cds.gen.adminservice.TestConnectionContext;
@@ -245,9 +249,23 @@ public class AdminService implements EventHandler{
     //    // publishToWebSocket("{\"ProjectID\": " +context.getPhase().getProjectId() + ", \"PhaseID\": " + context.getPhase().getId() +"}" );
     //     System.out.println("Should post");
        // CqnSelect select = Select.from("AdminService.ProjectGallery").where(p -> p.ID()==1);
-       CqnSelect select = Select.from("AdminService.ProjectGallery").byId(1);
-       //ProjectGallery p= db.run(select);
-       System.out.println(db.run(select));
+      // CqnSelect select = Select.from("AdminService.ProjectGallery").byId(1);
+        //ProjectGallery p= db.run(select).first(ProjectGallery.class).get();
+        //CqnDelete delete = Delete.from("AdminService.ProjectGallery").byId(3328970);
+        CqnDelete delete2 = Delete.from("AdminService.ProjectGallery").byId(3328970);
+     
+
+
+
+
+        db.run(delete2);
+    
+
+        context.setResult("Done");
+      // System.out.println(db.run(select));
+
+       
+
 
     }
 
