@@ -44,6 +44,7 @@ public class UserService implements EventHandler{
        // for(Projects project : context.getProjects()){
 
         Properties prop = context.getProperty();
+
         if(prop.getStatus().equalsIgnoreCase("Sold")){
 
             CqnSelect sel = Select.from(Properties_.class).where(p -> p.REFX().eq(prop.getRefx().toString()));
@@ -107,7 +108,8 @@ public class UserService implements EventHandler{
             }
             
         }
-        publishToWebSocket("HI", prop.getPhase().getProjectId().toString(), prop.getPhaseId().toString());
+        CqnSelect select = Select.from("AdminService.Phases").byId(prop.getPhaseId());
+        publishToWebSocket("HI", db.run(select).first().get().get("project_ID").toString(), prop.getPhaseId().toString());
         
         context.setCompleted();
 
