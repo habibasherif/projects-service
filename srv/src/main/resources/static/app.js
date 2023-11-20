@@ -1,7 +1,10 @@
 const stompClient = new StompJs.Client({
-    brokerURL: 'wss://projects-service-triumphant-baboon-hl.cfapps.us10-001.hana.ondemand.com/gs-guide-websocket',
-    
-});
+    brokerURL: 'wss://masterplan-active-echidna-on.cfapps.eu10-004.hana.ondemand.com/gs-guide-websocket',
+    //  Headers:{
+    //     Authorization: 
+    //     //'Basic YXV0aGVudGljYXRlZDo='
+    //   }
+    });
 
 stompClient.onConnect = (frame) => {
     console.log('Inside Connect');

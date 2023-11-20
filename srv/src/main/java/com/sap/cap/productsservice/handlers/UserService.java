@@ -6,9 +6,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import com.sap.cap.productsservice.TestingStomp.ReturnedGreeting;
 import com.sap.cds.ql.Select;
 import com.sap.cds.ql.Upsert;
 import com.sap.cds.ql.cqn.CqnSelect;
@@ -34,6 +36,7 @@ public class UserService implements EventHandler{
 
     @Autowired
     private RestTemplate restTemplate;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @On(event = SellPropertyContext.CDS_NAME)
     public void SellProperty (SellPropertyContext context){
@@ -104,6 +107,7 @@ public class UserService implements EventHandler{
             }
             
         }
+        publishToWebSocket("HI", prop.getPhase().getProjectId().toString(), prop.getPhaseId().toString());
         
         context.setCompleted();
 
@@ -111,6 +115,25 @@ public class UserService implements EventHandler{
 
         //}
     }
+     @Autowired
+    public UserService(SimpMessagingTemplate messagingTemplate) {
+        this.messagingTemplate = messagingTemplate;
+    }
+    public void publishToWebSocket(String message ,String project , String phase) {
+        System.out.println("Here");
+        messagingTemplate.convertAndSend("/topic/App",  new ReturnedGreeting(message));
+        messagingTemplate.convertAndSend("/topic/Project/"+project,  new ReturnedGreeting(message));
+        messagingTemplate.convertAndSend("/topic/Phase/"+phase,  new ReturnedGreeting(message));
+        String greeting = "greetings";
+        messagingTemplate.convertAndSend("/topic/"+greeting,  new ReturnedGreeting(message));
+
+
+
+
+        System.out.println("DONEE");
+
+    }
+
 
     public String sendCall(String user){
          String url = "https://edraky-development-environment-m6cksw9c.it-cpi024-rt.cfapps.eu10-002.hana.ondemand.com/http/MasterApp/C4C/Lead";
