@@ -58,6 +58,9 @@ public class UserService implements EventHandler{
                 ret.setErrorMessage("Property not Found");
                 context.setResult(ret);
                 context.setCompleted();
+                CqnSelect select = Select.from("AdminService.Phases").byId(prop.getPhaseId());
+                publishToWebSocket(ret.toString(), db.run(select).first().get().get("project_ID").toString(), prop.getPhaseId().toString());
+        
                 return;
             }
             String status = db.run(sel).first().get().get("Status").toString();
@@ -74,6 +77,9 @@ public class UserService implements EventHandler{
                     ret.setErrorCode(503);
                     ret.setErrorMessage("Error in Lead Creation");
                     context.setResult(ret);
+                    CqnSelect select = Select.from("AdminService.Phases").byId(prop.getPhaseId());
+                publishToWebSocket(ret.toString(), db.run(select).first().get().get("project_ID").toString(), prop.getPhaseId().toString());
+        
 
                 }
                 else{
@@ -83,6 +89,9 @@ public class UserService implements EventHandler{
                     ret.setRefx(prop.getRefx());
                     ret.setStatus(200);
                     context.setResult(ret);
+                    CqnSelect select = Select.from("AdminService.Phases").byId(prop.getPhaseId());
+                publishToWebSocket(ret.toString(), db.run(select).first().get().get("project_ID").toString(), prop.getPhaseId().toString());
+        
                 }
                 else{
 
@@ -93,6 +102,9 @@ public class UserService implements EventHandler{
                     ret.setErrorCode(503);
                     ret.setErrorMessage("Error in Lead Creation");
                     context.setResult(ret);
+                    CqnSelect select = Select.from("AdminService.Phases").byId(prop.getPhaseId());
+                publishToWebSocket(ret.toString(), db.run(select).first().get().get("project_ID").toString(), prop.getPhaseId().toString());
+        
                 }
             }
 
@@ -105,11 +117,12 @@ public class UserService implements EventHandler{
                 ret.setErrorCode(501);
                 ret.setErrorMessage("Property not Available");
                 context.setResult(ret);
+                CqnSelect select = Select.from("AdminService.Phases").byId(prop.getPhaseId());
+                publishToWebSocket(ret.toString(), db.run(select).first().get().get("project_ID").toString(), prop.getPhaseId().toString());
+        
             }
             
         }
-        CqnSelect select = Select.from("AdminService.Phases").byId(prop.getPhaseId());
-        publishToWebSocket("HI", db.run(select).first().get().get("project_ID").toString(), prop.getPhaseId().toString());
         
         context.setCompleted();
 
