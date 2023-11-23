@@ -76,9 +76,7 @@ public class UserService implements EventHandler{
                     ret.setErrorCode(503);
                     ret.setErrorMessage("Error in Lead Creation");
                     context.setResult(ret);
-                    CqnSelect select = Select.from("AdminService.Phases").byId(prop.getPhaseId());
-                publishToWebSocket(ret.toString(), db.run(select).first().get().get("project_ID").toString(), prop.getPhaseId().toString());
-        
+                   
 
                 }
                 else{
