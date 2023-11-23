@@ -21,6 +21,7 @@ import com.sap.cds.services.handler.annotations.ServiceName;
 import com.sap.cds.services.persistence.PersistenceService;
 
 import cds.gen.MassUploadRet;
+import cds.gen.WebSocketUpdateRet;
 import cds.gen.userservice.Properties;
 import cds.gen.userservice.Properties_;
 import cds.gen.userservice.SellPropertyContext;
@@ -58,9 +59,6 @@ public class UserService implements EventHandler{
                 ret.setErrorMessage("Property not Found");
                 context.setResult(ret);
                 context.setCompleted();
-                CqnSelect select = Select.from("AdminService.Phases").byId(prop.getPhaseId());
-                publishToWebSocket(ret.toString(), db.run(select).first().get().get("project_ID").toString(), prop.getPhaseId().toString());
-        
                 return;
             }
             String status = db.run(sel).first().get().get("Status").toString();
@@ -90,8 +88,12 @@ public class UserService implements EventHandler{
                     ret.setStatus(200);
                     context.setResult(ret);
                     CqnSelect select = Select.from("AdminService.Phases").byId(prop.getPhaseId());
-                publishToWebSocket(ret.toString(), db.run(select).first().get().get("project_ID").toString(), prop.getPhaseId().toString());
-        
+                    WebSocketUpdateRet websocketret = WebSocketUpdateRet.create();
+                    // websocketret.setMapID(prop.getMapID());
+                    // websocketret.setRefx(prop.getRefx());
+                    // websocketret.setStatus("Sold");
+                    publishToWebSocket(websocketret.toString(), db.run(select).first().get().get("project_ID").toString(), prop.getPhaseId().toString());
+                    
                 }
                 else{
 
@@ -102,9 +104,7 @@ public class UserService implements EventHandler{
                     ret.setErrorCode(503);
                     ret.setErrorMessage("Error in Lead Creation");
                     context.setResult(ret);
-                    CqnSelect select = Select.from("AdminService.Phases").byId(prop.getPhaseId());
-                publishToWebSocket(ret.toString(), db.run(select).first().get().get("project_ID").toString(), prop.getPhaseId().toString());
-        
+                    
                 }
             }
 
@@ -117,9 +117,7 @@ public class UserService implements EventHandler{
                 ret.setErrorCode(501);
                 ret.setErrorMessage("Property not Available");
                 context.setResult(ret);
-                CqnSelect select = Select.from("AdminService.Phases").byId(prop.getPhaseId());
-                publishToWebSocket(ret.toString(), db.run(select).first().get().get("project_ID").toString(), prop.getPhaseId().toString());
-        
+                
             }
             
         }

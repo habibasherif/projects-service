@@ -8,6 +8,21 @@ using { sap.capire.properties as db } from '../db/schema';
     ErrorMessage: String;
 }
 
+type WebSocketDeleteRet{
+    Change: String;
+    Data:{ID:String}
+}
+
+type WebSocketUpdateRet{
+    Change: String;
+    Data:{
+        REFX:String;
+        MapID:String;
+        Status:String;
+        };
+
+}
+
 
 service AdminService {
     entity Properties   as projection on db.Properties;
@@ -22,6 +37,7 @@ service AdminService {
     action TestConnection (phase : Phases) returns String;
     action Populate();
     action deleteContent() returns String;
+    
     
     
 }
