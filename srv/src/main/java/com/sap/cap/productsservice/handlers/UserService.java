@@ -22,6 +22,7 @@ import com.sap.cds.services.persistence.PersistenceService;
 
 import cds.gen.MassUploadRet;
 import cds.gen.WebSocketUpdateRet;
+import cds.gen.WebSocketUpdateRet.Data;
 import cds.gen.userservice.Properties;
 import cds.gen.userservice.Properties_;
 import cds.gen.userservice.SellPropertyContext;
@@ -89,9 +90,13 @@ public class UserService implements EventHandler{
                     context.setResult(ret);
                     CqnSelect select = Select.from("AdminService.Phases").byId(prop.getPhaseId());
                     WebSocketUpdateRet websocketret = WebSocketUpdateRet.create();
-                    // websocketret.setMapID(prop.getMapID());
-                    // websocketret.setRefx(prop.getRefx());
-                    // websocketret.setStatus("Sold");
+                    Data data = Data.create();
+                    
+                    data.setMapID(prop.getMapID());
+                    data.setRefx(prop.getRefx());
+                    data.setStatus("Sold");
+                    websocketret.setData(data);
+                    
                     publishToWebSocket(websocketret.toString(), db.run(select).first().get().get("project_ID").toString(), prop.getPhaseId().toString());
                     
                 }
