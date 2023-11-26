@@ -150,12 +150,6 @@ public class UserService implements EventHandler{
         messagingTemplate.convertAndSend("/topic/App",  new ReturnedGreeting(message));
         messagingTemplate.convertAndSend("/topic/Project/"+project,  new ReturnedGreeting(message));
         messagingTemplate.convertAndSend("/topic/Phase/"+phase,  new ReturnedGreeting(message));
-        String greeting = "greetings";
-        messagingTemplate.convertAndSend("/topic/"+greeting,  new ReturnedGreeting(message));
-
-
-
-
         System.out.println("DONEE");
 
     }
@@ -168,7 +162,7 @@ public class UserService implements EventHandler{
     // Define the request body
     String requestBody = "{\n" +
     "    \"Name\": \"" + user + "\",\n" +
-    "    \"Company\": \"Master App\"\n" +
+    "    \"Company\": \"Master Plan\"\n" +
     "}";
 
     // Define the headers
