@@ -102,7 +102,7 @@ public class UserService implements EventHandler{
                     
 
                     //websocketret.toJson();
-                    publishToWebSocket(websocketret.toJson(), db.run(select).first().get().get("project_ID").toString(), prop.getPhaseId().toString());
+                    publishToWebSocket(websocketret.toJson(), db.run(select).first().get().get("project_ID").toString(), prop.getPhaseId().toString(),prop.getMapID());
                     
 
                 }
@@ -145,11 +145,13 @@ public class UserService implements EventHandler{
     public UserService(SimpMessagingTemplate messagingTemplate) {
         this.messagingTemplate = messagingTemplate;
     }
-    public void publishToWebSocket(String message ,String project , String phase) {
+    public void publishToWebSocket(String message ,String project , String phase,String property) {
         System.out.println("Here");
         messagingTemplate.convertAndSend("/topic/App",  new ReturnedGreeting(message));
         messagingTemplate.convertAndSend("/topic/Project/"+project,  new ReturnedGreeting(message));
         messagingTemplate.convertAndSend("/topic/Phase/"+phase,  new ReturnedGreeting(message));
+        messagingTemplate.convertAndSend("/topic/Property/"+property,  new ReturnedGreeting(message));
+
         System.out.println("DONEE");
 
     }
