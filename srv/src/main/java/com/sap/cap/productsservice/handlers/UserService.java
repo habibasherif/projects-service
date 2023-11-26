@@ -42,10 +42,10 @@ public class UserService implements EventHandler{
 
     @On(event = SellPropertyContext.CDS_NAME)
     public void SellProperty (SellPropertyContext context){
-        System.out.println("HEREEEEEEEEEEEE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-       // for(Projects project : context.getProjects()){
+     
 
         Properties prop = context.getProperty();
+        System.out.println("can you see me2");
 
         if(prop.getStatus().equalsIgnoreCase("Sold")){
 
@@ -63,7 +63,9 @@ public class UserService implements EventHandler{
                 return;
             }
             String status = db.run(sel).first().get().get("Status").toString();
+           
             if(status.equalsIgnoreCase("Available")){
+                System.out.println("can you see me available");
                 prop.setStatus("sold");
                 CqnUpsert upsert = Upsert.into(Properties_.class).entry(prop);
                 db.run(upsert);
@@ -81,6 +83,7 @@ public class UserService implements EventHandler{
                 }
                 else{
                 if(sendCall(context.getUser()).equals("OK")){
+                    
                     MassUploadRet ret = MassUploadRet.create();
                     ret.setMapID(prop.getMapID());
                     ret.setRefx(prop.getRefx());
@@ -88,18 +91,24 @@ public class UserService implements EventHandler{
                     context.setResult(ret);
                     CqnSelect select = Select.from("AdminService.Phases").byId(prop.getPhaseId());
                     WebSocketUpdateRet websocketret = WebSocketUpdateRet.create();
+                    websocketret.setChange("Update");
                     Data data = Data.create();
                     
                     data.setMapID(prop.getMapID());
                     data.setRefx(prop.getRefx());
                     data.setStatus("Sold");
                     websocketret.setData(data);
+                    System.out.println(websocketret.toString());
                     
-                    publishToWebSocket(websocketret.toString(), db.run(select).first().get().get("project_ID").toString(), prop.getPhaseId().toString());
+
+                    //websocketret.toJson();
+                    publishToWebSocket(websocketret.toJson(), db.run(select).first().get().get("project_ID").toString(), prop.getPhaseId().toString());
                     
+
                 }
                 else{
 
+                    System.out.println("can you see me not ok");
                     MassUploadRet ret = MassUploadRet.create();
                     ret.setMapID(prop.getMapID());
                     ret.setRefx(prop.getRefx());
@@ -125,6 +134,7 @@ public class UserService implements EventHandler{
             
         }
         
+        System.out.println("can you see me done");
         context.setCompleted();
 
 
