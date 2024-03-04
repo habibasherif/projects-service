@@ -158,7 +158,7 @@ public class UserService implements EventHandler{
 
 
     public String sendCall(String user){
-         String url = "https://edraky-development-environment-m6cksw9c.it-cpi024-rt.cfapps.eu10-002.hana.ondemand.com/http/MasterApp/C4C/Lead";
+         String url = "https://arkan-temp-er1ysntj.it-cpi024-rt.cfapps.eu10-002.hana.ondemand.com/http/MasterApp/C4C/Lead";
     HttpMethod method = HttpMethod.POST;
 
     // Define the request body
@@ -170,7 +170,7 @@ public class UserService implements EventHandler{
     // Define the headers
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
-    headers.setBasicAuth("habiba.sherif@edraky.com", "happyBee123");
+    headers.setBasicAuth("habiba.sherif@edraky.com", "W't297r=q|(J");
 
     // Create the HttpEntity with the request body and headers
     HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, headers);
